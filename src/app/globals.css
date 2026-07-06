@@ -40,6 +40,12 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
+  /* Tokens propios del directorio */
+  --color-whatsapp: var(--whatsapp);
+  --color-whatsapp-foreground: var(--whatsapp-foreground);
+  --color-abierto: var(--abierto);
+  --color-abierto-suave: var(--abierto-suave);
+  --color-miel-clara: var(--miel-clara);
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -49,41 +55,54 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+/*
+ * Paleta "El Toldo" — comercio de barrio bogotano elevado.
+ * Papel casi blanco + tinta espresso + miel quemada (marca) + verde SOLO
+ * para WhatsApp/"Abierto". Modo claro únicamente (ver docs/diseno.md).
+ */
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --background: oklch(0.988 0.004 85);
+  --foreground: oklch(0.24 0.015 55);
+  --card: oklch(0.999 0.002 85);
+  --card-foreground: oklch(0.24 0.015 55);
+  --popover: oklch(0.999 0.002 85);
+  --popover-foreground: oklch(0.24 0.015 55);
+  --primary: oklch(0.53 0.125 60);
+  --primary-foreground: oklch(0.99 0.005 85);
+  --secondary: oklch(0.955 0.012 80);
+  --secondary-foreground: oklch(0.3 0.02 55);
+  --muted: oklch(0.955 0.01 80);
+  --muted-foreground: oklch(0.5 0.02 55);
+  --accent: oklch(0.93 0.03 70);
+  --accent-foreground: oklch(0.3 0.03 58);
+  --destructive: oklch(0.55 0.2 27);
+  --border: oklch(0.9 0.012 75);
+  --input: oklch(0.89 0.014 75);
+  --ring: oklch(0.53 0.125 60);
+  --chart-1: oklch(0.53 0.125 60);
+  --chart-2: oklch(0.55 0.15 150);
+  --chart-3: oklch(0.45 0.03 55);
+  --chart-4: oklch(0.75 0.1 70);
+  --chart-5: oklch(0.65 0.05 55);
+  --radius: 0.8rem;
+  --sidebar: oklch(0.97 0.008 82);
+  --sidebar-foreground: oklch(0.24 0.015 55);
+  --sidebar-primary: oklch(0.53 0.125 60);
+  --sidebar-primary-foreground: oklch(0.99 0.005 85);
+  --sidebar-accent: oklch(0.93 0.03 70);
+  --sidebar-accent-foreground: oklch(0.3 0.03 58);
+  --sidebar-border: oklch(0.9 0.012 75);
+  --sidebar-ring: oklch(0.53 0.125 60);
+  /* Propios */
+  --whatsapp: oklch(0.55 0.15 150);
+  --whatsapp-foreground: oklch(0.99 0.005 85);
+  --abierto: oklch(0.45 0.13 152);
+  --abierto-suave: oklch(0.95 0.04 152);
+  --miel-clara: oklch(0.66 0.13 64);
 }
 
+/* El modo oscuro no se usa (público de barrio, modo claro fijo), pero los
+   componentes shadcn esperan estas variables si algún día se activa. */
 .dark {
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
@@ -116,6 +135,11 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+  --whatsapp: oklch(0.55 0.15 150);
+  --whatsapp-foreground: oklch(0.99 0.005 85);
+  --abierto: oklch(0.75 0.13 152);
+  --abierto-suave: oklch(0.3 0.04 152);
+  --miel-clara: oklch(0.66 0.13 64);
 }
 
 @layer base {
@@ -126,6 +150,56 @@
     @apply bg-background text-foreground;
   }
   html {
-    @apply font-sans;
+    @apply font-sans scroll-smooth;
+  }
+  ::selection {
+    background: oklch(0.9 0.06 70);
+    color: oklch(0.24 0.015 55);
+  }
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+}
+
+@layer components {
+  /*
+   * Firma visual del directorio: la franja de toldo.
+   * Rayas diagonales a dos tonos de miel, como la lona sobre la vitrina de
+   * una tienda de barrio. Usar SOLO en: borde de portada de ficha, tope de
+   * la barra fija de contacto y tope del footer (docs/diseno.md).
+   */
+  .franja-toldo {
+    background-image: repeating-linear-gradient(
+      -45deg,
+      var(--primary) 0 12px,
+      var(--miel-clara) 12px 24px
+    );
+  }
+
+  /* Contenedor estándar de todas las páginas públicas. */
+  .contenedor {
+    @apply mx-auto w-full max-w-6xl px-4 sm:px-6;
+  }
+}
+
+@layer utilities {
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
