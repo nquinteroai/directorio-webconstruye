@@ -9,6 +9,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { MapaPerezoso } from "@/components/mapas/mapa-perezoso";
 import { TarjetaNegocio } from "@/components/publico/tarjeta-negocio";
 import { iconoCategoria } from "@/lib/iconos";
 import { obtenerCategoriaPorSlug } from "@/lib/queries/categorias";
@@ -124,7 +125,21 @@ export default async function PaginaZonaCategoria({ params }: Props) {
         </p>
       </header>
 
-      {/* El mapa Leaflet de la categoría se monta aquí en la Fase 4. */}
+      <MapaPerezoso
+        className="mt-6 h-64 sm:h-80"
+        etiqueta={`Mapa de ${categoria.nombre.toLowerCase()} en ${zona.nombre}`}
+        centro={{ lat: zona.lat, lng: zona.lng }}
+        zoom={zona.zoom}
+        puntos={negocios.map((n) => ({
+          id: n.id,
+          slug: n.slug,
+          nombre: n.nombre,
+          categoria: n.categoria.nombre,
+          lat: n.lat,
+          lng: n.lng,
+          destacado: n.destacado,
+        }))}
+      />
 
       <section
         aria-label={`${categoria.nombre} en ${zona.nombre}`}

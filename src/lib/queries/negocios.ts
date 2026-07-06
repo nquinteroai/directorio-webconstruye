@@ -17,6 +17,8 @@ export interface TarjetaNegocio {
   nombre: string;
   descripcion_corta: string;
   barrio: string | null;
+  lat: number;
+  lng: number;
   logo_url: string | null;
   foto_portada_url: string | null;
   destacado: boolean;
@@ -26,8 +28,8 @@ export interface TarjetaNegocio {
   zona: Pick<Zona, "slug" | "nombre">;
 }
 
-const CAMPOS_TARJETA = `id, slug, nombre, descripcion_corta, barrio, logo_url,
-  foto_portada_url, destacado, verificado, horarios,
+const CAMPOS_TARJETA = `id, slug, nombre, descripcion_corta, barrio, lat, lng,
+  logo_url, foto_portada_url, destacado, verificado, horarios,
   categoria:categorias(slug, nombre, icono), zona:zonas(slug, nombre)`;
 
 /**

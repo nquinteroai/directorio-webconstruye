@@ -28,6 +28,7 @@ import {
 } from "@/components/negocio/insignias";
 import { ResenaForm } from "@/components/negocio/resena-form";
 import { ResenasLista } from "@/components/negocio/resenas-lista";
+import { MapaPerezoso } from "@/components/mapas/mapa-perezoso";
 import { PortadaFallback } from "@/components/publico/portada-fallback";
 import { TarjetaNegocio } from "@/components/publico/tarjeta-negocio";
 import { siteConfig } from "@/config/site";
@@ -294,7 +295,24 @@ export default async function PaginaNegocio({ params }: Props) {
                   {negocio.zona.nombre}, {negocio.zona.ciudad}
                 </span>
               </p>
-              {/* El mapa interactivo (Leaflet) se monta aquí en la Fase 4. */}
+              <MapaPerezoso
+                className="h-56 sm:h-72"
+                etiqueta={`Mapa con la ubicación de ${negocio.nombre}`}
+                centro={{ lat: negocio.lat, lng: negocio.lng }}
+                zoom={16}
+                popupConEnlace={false}
+                puntos={[
+                  {
+                    id: negocio.id,
+                    slug: negocio.slug,
+                    nombre: negocio.nombre,
+                    categoria: negocio.categoria.nombre,
+                    lat: negocio.lat,
+                    lng: negocio.lng,
+                    destacado: negocio.destacado,
+                  },
+                ]}
+              />
               <Button
                 render={
                   <a

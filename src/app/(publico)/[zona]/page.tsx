@@ -9,6 +9,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { MapaPerezoso } from "@/components/mapas/mapa-perezoso";
 import { TarjetaNegocio } from "@/components/publico/tarjeta-negocio";
 import { iconoCategoria } from "@/lib/iconos";
 import { obtenerPorZona } from "@/lib/queries/negocios";
@@ -111,7 +112,23 @@ export default async function PaginaZona({ params }: Props) {
         </nav>
       ) : null}
 
-      {/* El mapa Leaflet de la zona se monta aquí en la Fase 4. */}
+      {negocios.length > 0 ? (
+        <MapaPerezoso
+          className="mt-6 h-64 sm:h-80"
+          etiqueta={`Mapa de negocios en ${zona.nombre}`}
+          centro={{ lat: zona.lat, lng: zona.lng }}
+          zoom={zona.zoom}
+          puntos={negocios.map((n) => ({
+            id: n.id,
+            slug: n.slug,
+            nombre: n.nombre,
+            categoria: n.categoria.nombre,
+            lat: n.lat,
+            lng: n.lng,
+            destacado: n.destacado,
+          }))}
+        />
+      ) : null}
 
       <section aria-label={`Listado de negocios en ${zona.nombre}`} className="mt-8">
         {negocios.length > 0 ? (
