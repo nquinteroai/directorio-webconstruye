@@ -190,7 +190,11 @@ export const obtenerCombinacionesActivas = cache(
           a.zona.nombre.localeCompare(b.zona.nombre, "es") ||
           a.orden - b.orden,
       )
-      .map(({ orden: _orden, ...resto }) => resto);
+      .map((combo) => ({
+        zona: combo.zona,
+        categoria: combo.categoria,
+        total: combo.total,
+      }));
   },
 );
 

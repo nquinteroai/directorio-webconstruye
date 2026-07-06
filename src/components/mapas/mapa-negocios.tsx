@@ -34,6 +34,19 @@ const ATRIBUCION =
   '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>';
 const URL_TILES = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
 
+/**
+ * bindPopup recibe HTML crudo: todo dato dinámico se escapa para impedir
+ * inyección (XSS) aunque un nombre de negocio traiga marcado malicioso.
+ */
+function escaparHtml(texto: string): string {
+  return texto
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+}
+
 /** Con muchos pines, agrupa con leaflet.markercluster (cargado bajo demanda). */
 function MarcadoresAgrupados({
   puntos,
@@ -58,9 +71,9 @@ function MarcadoresAgrupados({
           alt: punto.nombre,
         });
         marcador.bindPopup(
-          `<strong>${punto.nombre}</strong><br/><span>${punto.categoria}</span>` +
+          `<strong>${escaparHtml(punto.nombre)}</strong><br/><span>${escaparHtml(punto.categoria)}</span>` +
             (popupConEnlace
-              ? `<br/><a href="/negocio/${punto.slug}">Ver ficha completa</a>`
+              ? `<br/><a href="/negocio/${encodeURIComponent(punto.slug)}">Ver ficha completa</a>`
               : ""),
         );
         grupo.addLayer(marcador);

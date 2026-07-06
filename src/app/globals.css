@@ -79,11 +79,13 @@
   --border: oklch(0.9 0.012 75);
   --input: oklch(0.89 0.014 75);
   --ring: oklch(0.53 0.125 60);
-  --chart-1: oklch(0.53 0.125 60);
-  --chart-2: oklch(0.55 0.15 150);
-  --chart-3: oklch(0.45 0.03 55);
-  --chart-4: oklch(0.75 0.1 70);
-  --chart-5: oklch(0.65 0.05 55);
+  /* Paleta categórica de gráficas — validada con dataviz (CVD + contraste).
+     Orden fijo por identidad: 1 vistas · 2 whatsapp · 3 llamadas · 4 sitio web · 5 cómo llegar */
+  --chart-1: #96500f;
+  --chart-2: #0e8a46;
+  --chart-3: #1d72b8;
+  --chart-4: #b0356b;
+  --chart-5: #8a5cc9;
   --radius: 0.8rem;
   --sidebar: oklch(0.97 0.008 82);
   --sidebar-foreground: oklch(0.24 0.015 55);
