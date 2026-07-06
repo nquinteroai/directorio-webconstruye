@@ -28,6 +28,7 @@ import {
 } from "@/components/negocio/insignias";
 import { ResenaForm } from "@/components/negocio/resena-form";
 import { ResenasLista } from "@/components/negocio/resenas-lista";
+import { VistaTracker } from "@/components/negocio/vista-tracker";
 import { MapaPerezoso } from "@/components/mapas/mapa-perezoso";
 import { PortadaFallback } from "@/components/publico/portada-fallback";
 import { TarjetaNegocio } from "@/components/publico/tarjeta-negocio";
@@ -82,6 +83,7 @@ export default async function PaginaNegocio({ params }: Props) {
 
   return (
     <article className="pb-28 lg:pb-0">
+      <VistaTracker slug={negocio.slug} />
       {/* Migas de pan */}
       <div className="contenedor pt-4">
         <Breadcrumb>
