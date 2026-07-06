@@ -23,6 +23,18 @@ export const metadata: Metadata = {
     template: `%s | ${siteConfig.nombre}`,
   },
   description: siteConfig.descripcion,
+  openGraph: {
+    type: "website",
+    siteName: siteConfig.nombre,
+    locale: "es_CO",
+  },
+  twitter: {
+    card: "summary_large_image",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({

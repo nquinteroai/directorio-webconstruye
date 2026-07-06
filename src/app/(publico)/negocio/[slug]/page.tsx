@@ -34,6 +34,11 @@ import { PortadaFallback } from "@/components/publico/portada-fallback";
 import { TarjetaNegocio } from "@/components/publico/tarjeta-negocio";
 import { siteConfig } from "@/config/site";
 import {
+  datosBreadcrumb,
+  datosLocalBusiness,
+  JsonLd,
+} from "@/lib/seo/jsonld";
+import {
   obtenerNegocioPorSlug,
   obtenerSimilares,
   obtenerSlugsNegocios,
@@ -83,6 +88,20 @@ export default async function PaginaNegocio({ params }: Props) {
 
   return (
     <article className="pb-28 lg:pb-0">
+      <JsonLd
+        datos={[
+          datosLocalBusiness(negocio, resumen),
+          datosBreadcrumb([
+            { nombre: "Inicio", ruta: "/" },
+            { nombre: negocio.zona.nombre, ruta: `/${negocio.zona.slug}` },
+            {
+              nombre: negocio.categoria.nombre,
+              ruta: `/${negocio.zona.slug}/${negocio.categoria.slug}`,
+            },
+            { nombre: negocio.nombre, ruta: `/negocio/${negocio.slug}` },
+          ]),
+        ]}
+      />
       <VistaTracker slug={negocio.slug} />
       {/* Migas de pan */}
       <div className="contenedor pt-4">

@@ -18,6 +18,7 @@ import {
   obtenerPorZonaYCategoria,
 } from "@/lib/queries/negocios";
 import { obtenerZonaPorSlug } from "@/lib/queries/zonas";
+import { datosBreadcrumb, datosItemList, JsonLd } from "@/lib/seo/jsonld";
 
 export const revalidate = 3600;
 export const dynamicParams = true;
@@ -93,6 +94,22 @@ export default async function PaginaZonaCategoria({ params }: Props) {
 
   return (
     <main className="contenedor py-6">
+      <JsonLd
+        datos={[
+          datosBreadcrumb([
+            { nombre: "Inicio", ruta: "/" },
+            { nombre: zona.nombre, ruta: `/${zona.slug}` },
+            {
+              nombre: categoria.nombre,
+              ruta: `/${zona.slug}/${categoria.slug}`,
+            },
+          ]),
+          datosItemList(
+            `${categoria.nombre} en ${zona.nombre}`,
+            negocios,
+          ),
+        ]}
+      />
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>

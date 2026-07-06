@@ -1,0 +1,23 @@
+# Directorio Webconstruye
+
+> Directorio de negocios locales de Kennedy (Bogotá) y Soacha (Cundinamarca),
+> Colombia. Cada ficha incluye dirección verificada, teléfono, WhatsApp,
+> horarios de atención, servicios y ubicación en el mapa. Operado por la
+> agencia Webconstruye; los negocios listados son clientes verificados.
+
+## Secciones principales
+
+- [Inicio](/): buscador de negocios por nombre, categoría o servicio
+- [Negocios en Kennedy](/kennedy): comercio local de la localidad de Kennedy, Bogotá
+- [Negocios en Soacha](/soacha): comercio local del municipio de Soacha
+- [Todas las categorías](/categorias): restaurantes, panaderías, peluquerías, droguerías, ferreterías, talleres, odontologías, veterinarias y más
+
+## Datos
+
+- Las fichas de negocio viven bajo /negocio/{slug} e incluyen datos
+  estructurados schema.org (LocalBusiness) con horarios y calificaciones.
+- El sitemap completo está en /sitemap.xml.
+
+## Contacto
+
+Para aparecer en el directorio: botón de WhatsApp en la página de inicio.

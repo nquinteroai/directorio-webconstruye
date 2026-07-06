@@ -96,7 +96,7 @@
   --sidebar-border: oklch(0.9 0.012 75);
   --sidebar-ring: oklch(0.53 0.125 60);
   /* Propios */
-  --whatsapp: oklch(0.55 0.15 150);
+  --whatsapp: oklch(0.47 0.13 151);
   --whatsapp-foreground: oklch(0.99 0.005 85);
   --abierto: oklch(0.45 0.13 152);
   --abierto-suave: oklch(0.95 0.04 152);
@@ -137,7 +137,7 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
-  --whatsapp: oklch(0.55 0.15 150);
+  --whatsapp: oklch(0.47 0.13 151);
   --whatsapp-foreground: oklch(0.99 0.005 85);
   --abierto: oklch(0.75 0.13 152);
   --abierto-suave: oklch(0.3 0.04 152);

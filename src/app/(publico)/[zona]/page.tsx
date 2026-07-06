@@ -14,6 +14,7 @@ import { TarjetaNegocio } from "@/components/publico/tarjeta-negocio";
 import { iconoCategoria } from "@/lib/iconos";
 import { obtenerPorZona } from "@/lib/queries/negocios";
 import { obtenerZonaPorSlug, obtenerZonas } from "@/lib/queries/zonas";
+import { datosBreadcrumb, datosItemList, JsonLd } from "@/lib/seo/jsonld";
 
 export const revalidate = 3600;
 export const dynamicParams = true;
@@ -67,6 +68,15 @@ export default async function PaginaZona({ params }: Props) {
 
   return (
     <main className="contenedor py-6">
+      <JsonLd
+        datos={[
+          datosBreadcrumb([
+            { nombre: "Inicio", ruta: "/" },
+            { nombre: zona.nombre, ruta: `/${zona.slug}` },
+          ]),
+          datosItemList(`Negocios en ${zona.nombre}`, negocios),
+        ]}
+      />
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>

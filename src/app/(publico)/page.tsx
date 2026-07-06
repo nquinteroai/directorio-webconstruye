@@ -11,6 +11,7 @@ import {
 import { Buscador } from "@/components/publico/buscador";
 import { TarjetaNegocio } from "@/components/publico/tarjeta-negocio";
 import { siteConfig } from "@/config/site";
+import { datosWebSite, JsonLd } from "@/lib/seo/jsonld";
 import { iconoCategoria } from "@/lib/iconos";
 import {
   obtenerCombinacionesActivas,
@@ -64,6 +65,7 @@ export default async function PaginaInicio() {
 
   return (
     <main>
+      <JsonLd datos={datosWebSite()} />
       {/* HÉROE: el buscador es el protagonista */}
       <section className="border-b bg-gradient-to-b from-accent/50 via-background to-background">
         <div className="contenedor flex flex-col items-center py-14 text-center sm:py-20">
