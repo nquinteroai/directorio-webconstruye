@@ -2,11 +2,15 @@ import Link from "next/link";
 import { MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { siteConfig } from "@/config/site";
+import { obtenerCombinacionesActivas } from "@/lib/queries/negocios";
 import { obtenerZonas } from "@/lib/queries/zonas";
 import { linkWhatsappAgencia } from "@/lib/utils/whatsapp";
 
 export async function Pie() {
-  const zonas = await obtenerZonas();
+  const [zonas, combinaciones] = await Promise.all([
+    obtenerZonas(),
+    obtenerCombinacionesActivas(),
+  ]);
   const anio = new Date().getFullYear();
 
   return (
@@ -101,6 +105,41 @@ export async function Pie() {
             </Button>
           </div>
         </div>
+
+        {combinaciones.length > 0 ? (
+          <nav
+            aria-label="Negocios por zona y categoría"
+            className="border-t"
+          >
+            <div className="contenedor grid gap-8 py-8 sm:grid-cols-2">
+              {zonas.map((zona) => {
+                const deLaZona = combinaciones.filter(
+                  (combo) => combo.zona.slug === zona.slug,
+                );
+                if (deLaZona.length === 0) return null;
+                return (
+                  <div key={zona.id}>
+                    <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                      En {zona.nombre}
+                    </p>
+                    <ul className="mt-3 flex flex-wrap gap-x-4 gap-y-1.5 text-sm text-muted-foreground">
+                      {deLaZona.map((combo) => (
+                        <li key={combo.categoria.slug}>
+                          <Link
+                            href={`/${combo.zona.slug}/${combo.categoria.slug}`}
+                            className="transition-colors hover:text-foreground"
+                          >
+                            {combo.categoria.nombre} en {combo.zona.nombre}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                );
+              })}
+            </div>
+          </nav>
+        ) : null}
 
         <div className="border-t">
           <div className="contenedor flex flex-col items-center justify-between gap-2 py-5 text-xs text-muted-foreground sm:flex-row">

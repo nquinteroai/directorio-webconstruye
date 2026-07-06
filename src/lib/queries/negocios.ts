@@ -87,6 +87,148 @@ export async function obtenerDestacados(
   return data as unknown as TarjetaNegocio[];
 }
 
+/** Tarjetas de todos los negocios activos de una zona. */
+export const obtenerPorZona = cache(
+  async (zonaId: string): Promise<TarjetaNegocio[]> => {
+    const supabase = clientePublico();
+    if (!supabase) return [];
+    const { data, error } = await supabase
+      .from("negocios")
+      .select(CAMPOS_TARJETA)
+      .eq("activo", true)
+      .eq("zona_id", zonaId)
+      .order("destacado", { ascending: false })
+      .order("nombre");
+    if (error) {
+      console.error("[negocios] obtenerPorZona:", error.message);
+      return [];
+    }
+    return data as unknown as TarjetaNegocio[];
+  },
+);
+
+/** Tarjetas de una combinación zona × categoría. */
+export async function obtenerPorZonaYCategoria(
+  zonaId: string,
+  categoriaId: string,
+): Promise<TarjetaNegocio[]> {
+  const supabase = clientePublico();
+  if (!supabase) return [];
+  const { data, error } = await supabase
+    .from("negocios")
+    .select(CAMPOS_TARJETA)
+    .eq("activo", true)
+    .eq("zona_id", zonaId)
+    .eq("categoria_id", categoriaId)
+    .order("destacado", { ascending: false })
+    .order("nombre");
+  if (error) {
+    console.error("[negocios] obtenerPorZonaYCategoria:", error.message);
+    return [];
+  }
+  return data as unknown as TarjetaNegocio[];
+}
+
+export interface CombinacionZonaCategoria {
+  zona: Pick<Zona, "slug" | "nombre">;
+  categoria: Pick<Categoria, "slug" | "nombre" | "icono">;
+  total: number;
+}
+
+/**
+ * Combinaciones zona × categoría con al menos 1 negocio activo.
+ * Alimenta el footer, /categorias y generateStaticParams de las landings.
+ */
+export const obtenerCombinacionesActivas = cache(
+  async (): Promise<CombinacionZonaCategoria[]> => {
+    const supabase = clientePublico();
+    if (!supabase) return [];
+    const { data, error } = await supabase
+      .from("negocios")
+      .select(
+        "zona:zonas(slug, nombre), categoria:categorias(slug, nombre, icono, orden)",
+      )
+      .eq("activo", true);
+    if (error) {
+      console.error("[negocios] obtenerCombinacionesActivas:", error.message);
+      return [];
+    }
+
+    const mapa = new Map<
+      string,
+      CombinacionZonaCategoria & { orden: number }
+    >();
+    for (const fila of data as unknown as {
+      zona: Pick<Zona, "slug" | "nombre"> | null;
+      categoria:
+        | (Pick<Categoria, "slug" | "nombre" | "icono"> & { orden: number })
+        | null;
+    }[]) {
+      if (!fila.zona || !fila.categoria) continue;
+      const clave = `${fila.zona.slug}/${fila.categoria.slug}`;
+      const existente = mapa.get(clave);
+      if (existente) {
+        existente.total += 1;
+      } else {
+        mapa.set(clave, {
+          zona: fila.zona,
+          categoria: {
+            slug: fila.categoria.slug,
+            nombre: fila.categoria.nombre,
+            icono: fila.categoria.icono,
+          },
+          total: 1,
+          orden: fila.categoria.orden,
+        });
+      }
+    }
+    return [...mapa.values()]
+      .sort(
+        (a, b) =>
+          a.zona.nombre.localeCompare(b.zona.nombre, "es") ||
+          a.orden - b.orden,
+      )
+      .map(({ orden: _orden, ...resto }) => resto);
+  },
+);
+
+/** Búsqueda pública vía RPC (full-text español + subcadena). */
+export async function buscarNegocios(q: string, limite = 20) {
+  const supabase = clientePublico();
+  if (!supabase) return [];
+  const { data, error } = await supabase.rpc("buscar_negocios", {
+    q,
+    p_limite: limite,
+  });
+  if (error) {
+    console.error("[negocios] buscarNegocios:", error.message);
+    return [];
+  }
+  return data;
+}
+
+/** Tarjetas por lista de ids, conservando el orden recibido. */
+export async function obtenerTarjetasPorIds(
+  ids: string[],
+): Promise<TarjetaNegocio[]> {
+  const supabase = clientePublico();
+  if (!supabase || ids.length === 0) return [];
+  const { data, error } = await supabase
+    .from("negocios")
+    .select(CAMPOS_TARJETA)
+    .in("id", ids)
+    .eq("activo", true);
+  if (error) {
+    console.error("[negocios] obtenerTarjetasPorIds:", error.message);
+    return [];
+  }
+  const tarjetas = data as unknown as TarjetaNegocio[];
+  const posicion = new Map(ids.map((id, i) => [id, i]));
+  return tarjetas.sort(
+    (a, b) => (posicion.get(a.id) ?? 0) - (posicion.get(b.id) ?? 0),
+  );
+}
+
 /**
  * "Negocios similares": misma categoría y zona (sin el actual); si no
  * alcanza, completa con otros negocios de la misma zona.

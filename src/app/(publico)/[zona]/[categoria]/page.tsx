@@ -1,0 +1,198 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+import { TarjetaNegocio } from "@/components/publico/tarjeta-negocio";
+import { iconoCategoria } from "@/lib/iconos";
+import { obtenerCategoriaPorSlug } from "@/lib/queries/categorias";
+import {
+  obtenerCombinacionesActivas,
+  obtenerPorZonaYCategoria,
+} from "@/lib/queries/negocios";
+import { obtenerZonaPorSlug } from "@/lib/queries/zonas";
+
+export const revalidate = 3600;
+export const dynamicParams = true;
+
+interface Props {
+  params: Promise<{ zona: string; categoria: string }>;
+}
+
+export async function generateStaticParams() {
+  const combinaciones = await obtenerCombinacionesActivas();
+  return combinaciones.map((combo) => ({
+    zona: combo.zona.slug,
+    categoria: combo.categoria.slug,
+  }));
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { zona: slugZona, categoria: slugCategoria } = await params;
+  const [zona, categoria] = await Promise.all([
+    obtenerZonaPorSlug(slugZona),
+    obtenerCategoriaPorSlug(slugCategoria),
+  ]);
+  if (!zona || !categoria) return { title: "Página no encontrada" };
+  return {
+    title: `${categoria.nombre} en ${zona.nombre}, ${zona.ciudad}`,
+    description:
+      `${categoria.nombre} en ${zona.nombre} con WhatsApp, teléfono, horarios y cómo llegar. ${categoria.descripcion_seo}`.slice(
+        0,
+        160,
+      ),
+    alternates: { canonical: `/${zona.slug}/${categoria.slug}` },
+  };
+}
+
+export default async function PaginaZonaCategoria({ params }: Props) {
+  const { zona: slugZona, categoria: slugCategoria } = await params;
+  const [zona, categoria] = await Promise.all([
+    obtenerZonaPorSlug(slugZona),
+    obtenerCategoriaPorSlug(slugCategoria),
+  ]);
+  if (!zona || !categoria) notFound();
+
+  const [negocios, combinaciones] = await Promise.all([
+    obtenerPorZonaYCategoria(zona.id, categoria.id),
+    obtenerCombinacionesActivas(),
+  ]);
+
+  // Regla anti "thin content": solo existen landings con al menos 1 negocio.
+  if (negocios.length === 0) notFound();
+
+  // Texto único basado en datos reales de la página (no plantilla vacía).
+  const barrios = [
+    ...new Set(negocios.map((n) => n.barrio).filter(Boolean)),
+  ] as string[];
+  const nombreCategoriaLower = categoria.nombre.toLowerCase();
+  const parrafoDatos =
+    negocios.length === 1
+      ? `En ${zona.nombre} tenemos ${negocios.length} negocio de ${nombreCategoriaLower} registrado${barrios.length > 0 ? `, en el sector de ${barrios[0]}` : ""}, con datos verificados: dirección exacta, teléfono, WhatsApp directo y horarios al día.`
+      : `En ${zona.nombre} tenemos ${negocios.length} negocios de ${nombreCategoriaLower} registrados${barrios.length > 0 ? `, en barrios como ${barrios.slice(0, 4).join(", ")}` : ""}. Todos con datos verificados: dirección exacta, teléfono, WhatsApp directo y horarios al día.`;
+
+  // Enlazado interno (hub & spokes): otras categorías en esta zona y esta
+  // categoría en otras zonas.
+  const otrasCategorias = combinaciones
+    .filter(
+      (c) => c.zona.slug === zona.slug && c.categoria.slug !== categoria.slug,
+    )
+    .slice(0, 6);
+  const mismaCategoriaOtraZona = combinaciones.filter(
+    (c) => c.categoria.slug === categoria.slug && c.zona.slug !== zona.slug,
+  );
+
+  const IconoCategoria = iconoCategoria(categoria.icono);
+
+  return (
+    <main className="contenedor py-6">
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink render={<Link href="/" />}>Inicio</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbLink render={<Link href={`/${zona.slug}`} />}>
+              {zona.nombre}
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>{categoria.nombre}</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
+
+      <header className="mt-4 max-w-3xl">
+        <div className="flex items-center gap-3">
+          <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-accent text-primary">
+            <IconoCategoria aria-hidden className="size-5" />
+          </span>
+          <h1 className="font-heading text-3xl font-semibold tracking-tight sm:text-4xl">
+            {categoria.nombre} en {zona.nombre}
+          </h1>
+        </div>
+        <p className="mt-3 text-[15px] leading-7 text-muted-foreground">
+          {categoria.descripcion_seo} {parrafoDatos}
+        </p>
+      </header>
+
+      {/* El mapa Leaflet de la categoría se monta aquí en la Fase 4. */}
+
+      <section
+        aria-label={`${categoria.nombre} en ${zona.nombre}`}
+        className="mt-8"
+      >
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {negocios.map((negocio, i) => (
+            <TarjetaNegocio key={negocio.id} negocio={negocio} prioridad={i < 4} />
+          ))}
+        </div>
+      </section>
+
+      {mismaCategoriaOtraZona.length > 0 ? (
+        <aside className="mt-10 rounded-xl border bg-secondary/40 p-5">
+          <p className="text-sm text-muted-foreground">
+            ¿Buscas {nombreCategoriaLower} en otra zona?{" "}
+            {mismaCategoriaOtraZona.map((combo, i) => (
+              <span key={combo.zona.slug}>
+                {i > 0 ? " · " : ""}
+                <Link
+                  href={`/${combo.zona.slug}/${combo.categoria.slug}`}
+                  className="font-semibold text-primary hover:underline"
+                >
+                  {combo.categoria.nombre} en {combo.zona.nombre}
+                </Link>
+              </span>
+            ))}
+          </p>
+        </aside>
+      ) : null}
+
+      {otrasCategorias.length > 0 ? (
+        <nav
+          aria-label={`Más categorías en ${zona.nombre}`}
+          className="mt-8"
+        >
+          <h2 className="font-heading text-lg font-semibold">
+            Más categorías en {zona.nombre}
+          </h2>
+          <ul className="mt-3 flex flex-wrap gap-2">
+            {otrasCategorias.map((combo) => {
+              const Icono = iconoCategoria(combo.categoria.icono);
+              return (
+                <li key={combo.categoria.slug}>
+                  <Link
+                    href={`/${combo.zona.slug}/${combo.categoria.slug}`}
+                    className="inline-flex items-center gap-1.5 rounded-full border bg-card px-3.5 py-1.5 text-sm font-medium transition-colors hover:border-primary/40 hover:text-primary"
+                  >
+                    <Icono aria-hidden className="size-3.5" />
+                    {combo.categoria.nombre}
+                    <span className="text-xs text-muted-foreground tabular-nums">
+                      ({combo.total})
+                    </span>
+                  </Link>
+                </li>
+              );
+            })}
+            <li>
+              <Link
+                href={`/${zona.slug}`}
+                className="inline-flex items-center rounded-full border border-primary/40 bg-card px-3.5 py-1.5 text-sm font-semibold text-primary transition-colors hover:bg-accent"
+              >
+                Todos los negocios en {zona.nombre} →
+              </Link>
+            </li>
+          </ul>
+        </nav>
+      ) : null}
+    </main>
+  );
+}
