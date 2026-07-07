@@ -174,7 +174,14 @@ export function NegocioForm({
               required
             >
               <SelectTrigger id="zona_id" className="w-full">
-                <SelectValue placeholder="Elige la zona" />
+                {/* Select.Value de Base UI muestra el `value` crudo (el
+                    UUID) salvo que se le pase `children` como función que
+                    resuelva la etiqueta — por eso el mapeo explícito aquí. */}
+                <SelectValue placeholder="Elige la zona">
+                  {(valor: string) =>
+                    zonas.find((z) => z.id === valor)?.nombre ?? "Elige la zona"
+                  }
+                </SelectValue>
               </SelectTrigger>
               <SelectContent>
                 {zonas.map((zona) => (
@@ -196,7 +203,12 @@ export function NegocioForm({
               required
             >
               <SelectTrigger id="categoria_id" className="w-full">
-                <SelectValue placeholder="Elige la categoría" />
+                <SelectValue placeholder="Elige la categoría">
+                  {(valor: string) =>
+                    categorias.find((c) => c.id === valor)?.nombre ??
+                    "Elige la categoría"
+                  }
+                </SelectValue>
               </SelectTrigger>
               <SelectContent>
                 {categorias.map((categoria) => (
