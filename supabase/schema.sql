@@ -208,17 +208,38 @@ create table public.negocios (
   fecha_ingreso     date not null default current_date,
   created_at        timestamptz not null default now(),
   updated_at        timestamptz not null default now(),
-  -- Vector de búsqueda full-text en español, sin tildes.
-  busqueda          tsvector generated always as (
-    setweight(to_tsvector('spanish'::regconfig, public.f_unaccent(coalesce(nombre, ''))), 'A') ||
-    setweight(to_tsvector('spanish'::regconfig, public.f_unaccent(coalesce(array_to_string(servicios, ' '), '') || ' ' || coalesce(array_to_string(palabras_clave, ' '), ''))), 'B') ||
-    setweight(to_tsvector('spanish'::regconfig, public.f_unaccent(coalesce(descripcion_corta, '') || ' ' || coalesce(descripcion_larga, '') || ' ' || coalesce(barrio, ''))), 'C')
-  ) stored
+  -- Vector de búsqueda full-text en español, sin tildes. NO es una columna
+  -- generada: to_tsvector() está marcada STABLE (no IMMUTABLE) en Postgres
+  -- porque los diccionarios de búsqueda se pueden alterar en caliente, y una
+  -- columna GENERATED exige que toda la expresión sea IMMUTABLE. Se recalcula
+  -- con el trigger trg_negocios_actualizar_busqueda de abajo (patrón oficial
+  -- de la documentación de Postgres para búsqueda de texto completo).
+  busqueda          tsvector
 );
 
 create trigger trg_negocios_updated_at
   before update on public.negocios
   for each row execute function public.set_updated_at();
+
+-- Recalcula `busqueda` en cada insert/update (reemplaza la columna generada;
+-- ver comentario en la definición de la columna más arriba).
+create or replace function public.negocios_actualizar_busqueda()
+returns trigger
+language plpgsql
+set search_path = ''
+as $$
+begin
+  new.busqueda :=
+    setweight(to_tsvector('spanish'::regconfig, public.f_unaccent(coalesce(new.nombre, ''))), 'A') ||
+    setweight(to_tsvector('spanish'::regconfig, public.f_unaccent(coalesce(array_to_string(new.servicios, ' '), '') || ' ' || coalesce(array_to_string(new.palabras_clave, ' '), ''))), 'B') ||
+    setweight(to_tsvector('spanish'::regconfig, public.f_unaccent(coalesce(new.descripcion_corta, '') || ' ' || coalesce(new.descripcion_larga, '') || ' ' || coalesce(new.barrio, ''))), 'C');
+  return new;
+end;
+$$;
+
+create trigger trg_negocios_actualizar_busqueda
+  before insert or update on public.negocios
+  for each row execute function public.negocios_actualizar_busqueda();
 
 alter table public.negocios enable row level security;
 
