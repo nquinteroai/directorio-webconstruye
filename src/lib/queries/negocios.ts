@@ -109,27 +109,26 @@ export const obtenerPorZona = cache(
   },
 );
 
-/** Tarjetas de una combinación zona × categoría. */
-export async function obtenerPorZonaYCategoria(
-  zonaId: string,
-  categoriaId: string,
-): Promise<TarjetaNegocio[]> {
-  const supabase = clientePublico();
-  if (!supabase) return [];
-  const { data, error } = await supabase
-    .from("negocios")
-    .select(CAMPOS_TARJETA)
-    .eq("activo", true)
-    .eq("zona_id", zonaId)
-    .eq("categoria_id", categoriaId)
-    .order("destacado", { ascending: false })
-    .order("nombre");
-  if (error) {
-    console.error("[negocios] obtenerPorZonaYCategoria:", error.message);
-    return [];
-  }
-  return data as unknown as TarjetaNegocio[];
-}
+/** Tarjetas de una combinación zona × categoría (cache: metadata + página). */
+export const obtenerPorZonaYCategoria = cache(
+  async (zonaId: string, categoriaId: string): Promise<TarjetaNegocio[]> => {
+    const supabase = clientePublico();
+    if (!supabase) return [];
+    const { data, error } = await supabase
+      .from("negocios")
+      .select(CAMPOS_TARJETA)
+      .eq("activo", true)
+      .eq("zona_id", zonaId)
+      .eq("categoria_id", categoriaId)
+      .order("destacado", { ascending: false })
+      .order("nombre");
+    if (error) {
+      console.error("[negocios] obtenerPorZonaYCategoria:", error.message);
+      return [];
+    }
+    return data as unknown as TarjetaNegocio[];
+  },
+);
 
 export interface CombinacionZonaCategoria {
   zona: Pick<Zona, "slug" | "nombre">;

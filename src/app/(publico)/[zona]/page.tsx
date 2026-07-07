@@ -31,7 +31,9 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { zona: slugZona } = await params;
   const zona = await obtenerZonaPorSlug(slugZona);
-  if (!zona) return { title: "Zona no encontrada" };
+  // notFound() aquí (y no solo en la página) garantiza status 404 real:
+  // con loading.tsx el streaming ya habría enviado un 200.
+  if (!zona) notFound();
   return {
     title: `Negocios en ${zona.nombre}, ${zona.ciudad}`,
     description: `Directorio de negocios en ${zona.nombre}: restaurantes, peluquerías, ferreterías, droguerías y más, con WhatsApp, horarios y cómo llegar.`,

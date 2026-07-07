@@ -65,7 +65,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const negocio = await obtenerNegocioPorSlug(slug);
-  if (!negocio) return { title: "Negocio no encontrado" };
+  // notFound() aquí garantiza status 404 real pese al streaming (loading.tsx).
+  if (!negocio) notFound();
   return {
     title: `${negocio.nombre} en ${negocio.zona.nombre} — ${negocio.categoria.nombre}`,
     description: negocio.descripcion_corta,

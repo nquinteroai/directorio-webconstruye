@@ -41,7 +41,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     obtenerZonaPorSlug(slugZona),
     obtenerCategoriaPorSlug(slugCategoria),
   ]);
-  if (!zona || !categoria) return { title: "Página no encontrada" };
+  // notFound() aquí garantiza status 404 real pese al streaming (loading.tsx).
+  if (!zona || !categoria) notFound();
+  const negocios = await obtenerPorZonaYCategoria(zona.id, categoria.id);
+  if (negocios.length === 0) notFound(); // anti thin-content
   return {
     title: `${categoria.nombre} en ${zona.nombre}, ${zona.ciudad}`,
     description:
