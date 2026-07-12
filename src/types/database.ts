@@ -32,6 +32,14 @@ export type FuenteClick = "ficha" | "listado" | "busqueda" | "home";
 
 export type DiaSemana = "lun" | "mar" | "mie" | "jue" | "vie" | "sab" | "dom";
 
+/** Resultado de un evento de sincronización CRM → Directorio. */
+export type ResultadoSync =
+  | "procesando"
+  | "publicado"
+  | "sin_match"
+  | "duplicado"
+  | "error";
+
 /** Franja de atención de un día. `null` = cerrado ese día. */
 export interface FranjaHoraria {
   /** Hora de apertura en formato HH:mm (24h). */
@@ -325,6 +333,80 @@ export interface Database {
           },
         ];
       };
+      sync_eventos: {
+        Row: {
+          evento_id: string;
+          origen: string;
+          resultado: ResultadoSync;
+          negocio_id: string | null;
+          payload: Json;
+          detalle: Json | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          evento_id: string;
+          origen: string;
+          resultado?: ResultadoSync;
+          negocio_id?: string | null;
+          payload: Json;
+          detalle?: Json | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          evento_id?: string;
+          origen?: string;
+          resultado?: ResultadoSync;
+          negocio_id?: string | null;
+          payload?: Json;
+          detalle?: Json | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "sync_eventos_negocio_id_fkey";
+            columns: ["negocio_id"];
+            isOneToOne: false;
+            referencedRelation: "negocios";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      // Tablas de Fábrica de Demos (misma base de datos, otra app).
+      // Solo LECTURA desde este proyecto; el schema lo administra ese repo.
+      demo_negocios: {
+        Row: {
+          id: string;
+          slug: string;
+          nombre: string;
+          sector_id: string;
+          telefono: string | null;
+          whatsapp: string | null;
+          direccion: string;
+          ciudad: string;
+          zona: string | null;
+          latitud: number | null;
+          longitud: number | null;
+          foto_fachada_url: string | null;
+          logo_url: string | null;
+          estado: string;
+          created_at: string;
+        };
+        Insert: never;
+        Update: never;
+        Relationships: [];
+      };
+      demo_sectores: {
+        Row: {
+          id: string;
+          nombre: string;
+        };
+        Insert: never;
+        Update: never;
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
     Functions: {
@@ -374,6 +456,10 @@ export type Click = Database["public"]["Tables"]["clicks"]["Row"];
 
 export type NegocioInsert = Database["public"]["Tables"]["negocios"]["Insert"];
 export type NegocioUpdate = Database["public"]["Tables"]["negocios"]["Update"];
+
+export type SyncEvento = Database["public"]["Tables"]["sync_eventos"]["Row"];
+export type DemoNegocio = Database["public"]["Tables"]["demo_negocios"]["Row"];
+export type DemoSector = Database["public"]["Tables"]["demo_sectores"]["Row"];
 
 /** Resultado de la RPC buscar_negocios. */
 export type ResultadoBusqueda =
