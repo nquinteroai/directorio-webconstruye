@@ -24,7 +24,7 @@ export const siteConfig = {
    * WhatsApp de la agencia en formato internacional (57 + 10 dígitos).
    * PLACEHOLDER: reemplazar por el número real antes de lanzar.
    */
-  agenciaWhatsapp: "573000000000",
+  agenciaWhatsapp: "573181682069",
   /** Mensaje precargado del CTA "¿Tienes un negocio? Aparece aquí". */
   mensajeCtaAgencia:
     "Hola, tengo un negocio y quiero aparecer en el Directorio Webconstruye.",
