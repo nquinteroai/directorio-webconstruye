@@ -10,7 +10,7 @@ import { esWhatsappValido } from "@/lib/utils/whatsapp";
 
 type DatosContacto = Pick<
   Negocio,
-  "slug" | "nombre" | "whatsapp" | "telefono" | "sitio_web" | "horarios"
+  "slug" | "nombre" | "whatsapp" | "telefono" | "sitio_web" | "horarios" | "es_ejemplo"
 >;
 
 /**
@@ -25,6 +25,8 @@ function rutaIr(tipo: string, slug: string, fuente = "ficha") {
 /** Panel de contacto para escritorio (columna lateral fija). */
 export function PanelContacto({ negocio }: { negocio: DatosContacto }) {
   const tieneWhatsapp = negocio.whatsapp && esWhatsappValido(negocio.whatsapp);
+  // En una ficha de ejemplo el único contacto es el CTA hacia la agencia.
+  const mostrarWhatsapp = negocio.es_ejemplo || tieneWhatsapp;
 
   return (
     <div className="space-y-3 rounded-xl border bg-card p-5 shadow-sm">
@@ -33,24 +35,28 @@ export function PanelContacto({ negocio }: { negocio: DatosContacto }) {
         <EstadoAbierto horarios={negocio.horarios} />
       </div>
 
-      {tieneWhatsapp ? (
+      {mostrarWhatsapp ? (
         <Button
           render={
             <a
               href={rutaIr("whatsapp", negocio.slug)}
               rel="nofollow"
-              aria-label={`Escribir por WhatsApp a ${negocio.nombre}`}
+              aria-label={
+                negocio.es_ejemplo
+                  ? "Pedir una ficha como esta a Webconstruye"
+                  : `Escribir por WhatsApp a ${negocio.nombre}`
+              }
             />
           }
           size="lg"
           className="h-11 w-full rounded-full bg-whatsapp text-whatsapp-foreground hover:bg-whatsapp/90"
         >
           <MessageCircle aria-hidden className="size-5" />
-          Escribir por WhatsApp
+          {negocio.es_ejemplo ? "Quiero una ficha así" : "Escribir por WhatsApp"}
         </Button>
       ) : null}
 
-      {negocio.telefono ? (
+      {!negocio.es_ejemplo && negocio.telefono ? (
         <Button
           render={
             <a
@@ -68,7 +74,7 @@ export function PanelContacto({ negocio }: { negocio: DatosContacto }) {
         </Button>
       ) : null}
 
-      {negocio.sitio_web ? (
+      {!negocio.es_ejemplo && negocio.sitio_web ? (
         <Button
           render={
             <a
@@ -108,6 +114,7 @@ export function PanelContacto({ negocio }: { negocio: DatosContacto }) {
 /** Barra fija inferior en móvil: siempre visible, botones grandes. */
 export function BarraContactoMovil({ negocio }: { negocio: DatosContacto }) {
   const tieneWhatsapp = negocio.whatsapp && esWhatsappValido(negocio.whatsapp);
+  const mostrarWhatsapp = negocio.es_ejemplo || tieneWhatsapp;
 
   return (
     <div className="fixed inset-x-0 bottom-0 z-40 lg:hidden">
@@ -116,18 +123,18 @@ export function BarraContactoMovil({ negocio }: { negocio: DatosContacto }) {
         aria-label={`Contactar a ${negocio.nombre}`}
         className="flex items-stretch gap-2 border-t bg-card/95 p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur"
       >
-        {tieneWhatsapp ? (
+        {mostrarWhatsapp ? (
           <Button
             render={<a href={rutaIr("whatsapp", negocio.slug)} rel="nofollow" />}
             size="lg"
             className="h-12 flex-1 rounded-full bg-whatsapp text-base font-semibold text-whatsapp-foreground hover:bg-whatsapp/90"
           >
             <MessageCircle aria-hidden className="size-5" />
-            WhatsApp
+            {negocio.es_ejemplo ? "Quiero una ficha así" : "WhatsApp"}
           </Button>
         ) : null}
 
-        {negocio.telefono ? (
+        {!negocio.es_ejemplo && negocio.telefono ? (
           <Button
             render={<a href={rutaIr("llamada", negocio.slug)} rel="nofollow" />}
             size="lg"

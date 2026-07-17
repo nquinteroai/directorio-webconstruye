@@ -2,10 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import {
   ArrowRight,
+  ArrowUpRight,
   BadgeCheck,
   ChartNoAxesColumn,
   MapPin,
   MessageCircle,
+  Sparkles,
   Store,
 } from "lucide-react";
 import { Buscador } from "@/components/publico/buscador";
@@ -173,8 +175,7 @@ export default async function PaginaInicio() {
               Negocios destacados
             </h2>
             <p className="mt-1 text-sm text-muted-foreground">
-              Los negocios premium del directorio, verificados por{" "}
-              {siteConfig.agenciaNombre}.
+              Los negocios que más destacan en tu zona.
             </p>
             <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {destacados.map((negocio, i) => (
@@ -184,6 +185,41 @@ export default async function PaginaInicio() {
           </div>
         </section>
       ) : null}
+
+      {/* MIRA LO QUE HACEMOS: enlace a los demos premium de la agencia */}
+      <section
+        aria-labelledby="titulo-demos"
+        className="contenedor py-12 sm:py-16"
+      >
+        <div className="flex flex-col items-start gap-6 rounded-2xl border bg-card p-6 shadow-sm sm:p-10 lg:flex-row lg:items-center lg:justify-between">
+          <div>
+            <p className="mb-2 inline-flex items-center gap-1.5 rounded-full bg-accent px-3 py-1 text-xs font-semibold text-primary">
+              <Sparkles aria-hidden className="size-3.5" />
+              Hecho por {siteConfig.agenciaNombre}
+            </p>
+            <h2
+              id="titulo-demos"
+              className="font-heading text-2xl font-semibold tracking-tight sm:text-3xl"
+            >
+              Mira lo que hacemos
+            </h2>
+            <p className="mt-2 max-w-prose text-muted-foreground">
+              Cada negocio del directorio puede tener su propia página web
+              profesional. Explora nuestros demos premium y mira el nivel de lo
+              que creamos.
+            </p>
+          </div>
+          <a
+            href="https://www.webconstruye.com/demos-hd"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex h-12 shrink-0 items-center justify-center gap-2 rounded-full bg-primary px-6 text-base font-semibold text-primary-foreground shadow-sm transition-colors hover:bg-primary/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+          >
+            Ver los demos
+            <ArrowUpRight aria-hidden className="size-5" />
+          </a>
+        </div>
+      </section>
 
       {/* CTA PARA DUEÑOS DE NEGOCIO */}
       <section aria-labelledby="titulo-cta" className="contenedor py-12 sm:py-16">

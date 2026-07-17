@@ -235,6 +235,15 @@ export default async function PaginaNegocio({ params }: Props) {
       {/* Cuerpo */}
       <div className="contenedor mt-8 grid gap-10 lg:grid-cols-[minmax(0,1fr)_320px]">
         <div className="min-w-0 space-y-10">
+          {negocio.es_ejemplo ? (
+            <p className="rounded-xl border border-primary/30 bg-accent/50 p-4 text-sm text-muted-foreground lg:hidden">
+              <span className="font-semibold text-foreground">
+                Ficha de ejemplo.
+              </span>{" "}
+              Así se vería tu negocio en el directorio. Habla con{" "}
+              {siteConfig.agenciaNombre} para tener la tuya.
+            </p>
+          ) : null}
           <section aria-labelledby="titulo-acerca">
             <h2
               id="titulo-acerca"
@@ -384,6 +393,15 @@ export default async function PaginaNegocio({ params }: Props) {
         {/* Columna de contacto (escritorio) */}
         <aside className="hidden lg:block" aria-label="Información de contacto">
           <div className="sticky top-24 space-y-4">
+            {negocio.es_ejemplo ? (
+              <p className="rounded-xl border border-primary/30 bg-accent/50 p-4 text-sm text-muted-foreground">
+                <span className="font-semibold text-foreground">
+                  Ficha de ejemplo.
+                </span>{" "}
+                Así se vería tu negocio en el directorio. Habla con{" "}
+                {siteConfig.agenciaNombre} para tener la tuya.
+              </p>
+            ) : null}
             <PanelContacto negocio={negocio} />
             <p className="flex items-start gap-2 rounded-xl border bg-secondary/50 p-4 text-xs text-muted-foreground">
               <MapPin aria-hidden className="mt-0.5 size-3.5 shrink-0" />

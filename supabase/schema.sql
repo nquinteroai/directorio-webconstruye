@@ -202,6 +202,9 @@ create table public.negocios (
   palabras_clave    text[] not null default '{}',
   destacado         boolean not null default false,
   verificado        boolean not null default false,
+  -- true = ficha de ejemplo (no cliente real): se muestra etiquetada y su
+  -- contacto va a la agencia. Las fichas reales del sync quedan en false.
+  es_ejemplo        boolean not null default false,
   activo            boolean not null default true,
   plan              text not null default 'web'
                     check (plan in ('web', 'mantenimiento', 'premium')),

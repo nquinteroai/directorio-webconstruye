@@ -175,6 +175,7 @@ export interface Database {
           palabras_clave: string[];
           destacado: boolean;
           verificado: boolean;
+          es_ejemplo: boolean;
           activo: boolean;
           plan: PlanNegocio;
           fecha_ingreso: string;
@@ -208,6 +209,7 @@ export interface Database {
           palabras_clave?: string[];
           destacado?: boolean;
           verificado?: boolean;
+          es_ejemplo?: boolean;
           activo?: boolean;
           plan?: PlanNegocio;
           fecha_ingreso?: string;
@@ -240,6 +242,7 @@ export interface Database {
           palabras_clave?: string[];
           destacado?: boolean;
           verificado?: boolean;
+          es_ejemplo?: boolean;
           activo?: boolean;
           plan?: PlanNegocio;
           fecha_ingreso?: string;

@@ -177,6 +177,7 @@ export async function publicarVenta(
     plan: planDeTier(payload.venta.tier),
     fecha_ingreso: payload.venta.fecha,
     verificado: true,
+    es_ejemplo: false,
     activo: true,
   };
   const { data: creado, error: errInsert } = await supabase

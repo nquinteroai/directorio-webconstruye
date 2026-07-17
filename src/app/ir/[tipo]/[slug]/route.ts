@@ -9,7 +9,15 @@ import {
   SEGMENTO_A_TIPO,
 } from "@/lib/tracking";
 import { telefonoHref } from "@/lib/utils/formato";
-import { esWhatsappValido, linkWhatsapp } from "@/lib/utils/whatsapp";
+import {
+  esWhatsappValido,
+  linkWhatsapp,
+  linkWhatsappAgencia,
+} from "@/lib/utils/whatsapp";
+
+/** Mensaje precargado cuando alguien contacta desde una ficha de EJEMPLO. */
+const MENSAJE_EJEMPLO_AGENCIA =
+  "Hola, vi una ficha de ejemplo en el Directorio Webconstruye y quiero una así para mi negocio.";
 
 export const dynamic = "force-dynamic";
 
@@ -35,11 +43,22 @@ export async function GET(request: NextRequest, { params }: Props) {
 
   const { data: negocio } = await supabase
     .from("negocios")
-    .select("id, slug, whatsapp, telefono, sitio_web, lat, lng")
+    .select("id, slug, whatsapp, telefono, sitio_web, lat, lng, es_ejemplo")
     .eq("slug", slug)
     .eq("activo", true)
     .maybeSingle();
   if (!negocio) notFound();
+
+  // Fichas de ejemplo: todo contacto (WhatsApp o llamada) es un lead para la
+  // agencia, no un negocio real. Se registra el clic igual (señal de interés).
+  if (negocio.es_ejemplo && (tipo === "whatsapp" || tipo === "llamada")) {
+    const fuente = normalizarFuente(request.nextUrl.searchParams.get("f"));
+    after(() => registrarClick(negocio.id, tipo, fuente));
+    return NextResponse.redirect(linkWhatsappAgencia(MENSAJE_EJEMPLO_AGENCIA), {
+      status: 302,
+      headers: { "X-Robots-Tag": "noindex, nofollow", "Cache-Control": "no-store" },
+    });
+  }
 
   let destino: string | null = null;
   switch (tipo) {

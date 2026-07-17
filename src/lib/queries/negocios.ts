@@ -23,13 +23,14 @@ export interface TarjetaNegocio {
   foto_portada_url: string | null;
   destacado: boolean;
   verificado: boolean;
+  es_ejemplo: boolean;
   horarios: Negocio["horarios"];
   categoria: Pick<Categoria, "slug" | "nombre" | "icono">;
   zona: Pick<Zona, "slug" | "nombre">;
 }
 
 const CAMPOS_TARJETA = `id, slug, nombre, descripcion_corta, barrio, lat, lng,
-  logo_url, foto_portada_url, destacado, verificado, horarios,
+  logo_url, foto_portada_url, destacado, verificado, es_ejemplo, horarios,
   categoria:categorias(slug, nombre, icono), zona:zonas(slug, nombre)`;
 
 /**

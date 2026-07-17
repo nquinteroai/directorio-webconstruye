@@ -45,6 +45,11 @@ export function TarjetaNegocio({
               Destacado
             </span>
           ) : null}
+          {negocio.es_ejemplo ? (
+            <span className="absolute right-3 top-3 inline-flex items-center rounded-full border border-border bg-card/90 px-2.5 py-1 text-xs font-semibold text-muted-foreground shadow-sm backdrop-blur-sm">
+              Ejemplo
+            </span>
+          ) : null}
         </div>
 
         <CardContent className="space-y-1.5 p-4">
