@@ -16,7 +16,7 @@ export const siteConfig = {
    * URL canónica del sitio. En producción se toma de NEXT_PUBLIC_SITE_URL
    * (configúrala en Vercel cuando el dominio esté definido).
    */
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://DOMINIO-PENDIENTE.com",
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://directorio.webconstruye.com",
   /** Meta description por defecto del sitio. */
   descripcion:
     "Encuentra los mejores negocios locales de Kennedy (Bogotá) y Soacha: restaurantes, peluquerías, ferreterías, droguerías y más. Con teléfono, WhatsApp, horarios y cómo llegar.",
