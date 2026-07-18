@@ -15,6 +15,7 @@ import {
   generarDescripcionLarga,
 } from "./descripciones";
 import type { PayloadSyncVenta } from "./esquema";
+import { reenviarAChambeaya, normalizarTelefonoCo } from "./chambeaya";
 
 type Supabase = SupabaseClient<Database>;
 
@@ -192,6 +193,21 @@ export async function publicarVenta(
     };
   }
 
+  // Reenvío a Chambeaya (best-effort): si la categoría es elegible y hay
+  // teléfono, registra el negocio como trabajador pendiente en Chambeaya.
+  const zonaChambeaya = zona.ciudad?.toLowerCase().includes("soacha")
+    ? "soacha"
+    : "bogota";
+  const telefonoChambeaya = normalizarTelefonoCo(registro.whatsapp, registro.telefono);
+  const reenvio = await reenviarAChambeaya({
+    eventoId: payload.evento_id,
+    nombre: registro.nombre,
+    telefono: telefonoChambeaya,
+    categoriaSlug,
+    zonaChambeaya,
+    ventaFecha: payload.venta.fecha,
+  });
+
   return {
     resultado: "publicado",
     negocioId: creado.id,
@@ -200,6 +216,7 @@ export async function publicarVenta(
       match: mejor,
       demo_id: demo.id,
       avisos: avisos.length ? avisos : undefined,
+      chambeaya: reenvio.ok ? "reenviado" : reenvio.motivo,
     } as unknown as Json,
   };
 }
