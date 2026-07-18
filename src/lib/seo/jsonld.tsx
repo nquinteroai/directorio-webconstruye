@@ -36,7 +36,8 @@ const TIPO_SCHEMA_POR_CATEGORIA: Record<string, string> = {
   lavanderias: "DryCleaningOrLaundry",
   floristerias: "Florist",
   inmobiliarias: "RealEstateAgent",
-  "contadores-y-abogados": "ProfessionalService",
+  contadores: "ProfessionalService",
+  abogados: "LegalService",
   licorerias: "LiquorStore",
 };
 

@@ -35,7 +35,8 @@ const CATEGORIAS_SEED = [
   "lavanderias",
   "floristerias",
   "inmobiliarias",
-  "contadores-y-abogados",
+  "contadores",
+  "abogados",
   "licorerias",
   "otros",
 ];

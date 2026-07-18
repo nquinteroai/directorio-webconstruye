@@ -24,7 +24,7 @@ const Q = {
   opticas:"optical eyewear glasses store", veterinarias:"veterinary clinic pet", talleres:"car mechanic workshop",
   "tecnologia-y-celulares":"cellphone mobile phone store", ropa:"clothing store boutique", calzado:"shoe store footwear",
   gimnasios:"gym fitness", lavanderias:"laundromat laundry", floristerias:"flower shop florist",
-  inmobiliarias:"real estate office", "contadores-y-abogados":"accounting office desk", licorerias:"liquor store bottles",
+  inmobiliarias:"real estate office", contadores:"accounting office desk", abogados:"law office lawyer", licorerias:"liquor store bottles",
   otros:"local shop store",
   asaderos:"roast chicken grill", areperias:"grilled corn cakes food", pizzerias:"pizzeria pizza",
   heladerias:"ice cream shop", queserias:"cheese dairy shop", "materiales-construccion":"construction materials",

@@ -60,7 +60,8 @@ insert into public.categorias (id, slug, nombre, icono, descripcion_seo, orden) 
 ('22222222-2222-4222-8222-222222222220', 'lavanderias', 'Lavanderías', 'WashingMachine', 'Lavado por kilos, lavado en seco y planchado con entrega puntual.', 20),
 ('22222222-2222-4222-8222-222222222221', 'floristerias', 'Floristerías', 'Flower2', 'Arreglos florales, ramos, condolencias y detalles para fechas especiales con domicilio.', 21),
 ('22222222-2222-4222-8222-222222222222', 'inmobiliarias', 'Inmobiliarias', 'Building2', 'Arriendo y venta de apartamentos, casas y locales con acompañamiento serio.', 22),
-('22222222-2222-4222-8222-222222222223', 'contadores-y-abogados', 'Contadores y abogados', 'Scale', 'Declaración de renta, contabilidad de negocios y asesoría legal confiable.', 23),
+('22222222-2222-4222-8222-222222222223', 'contadores', 'Contadores', 'Calculator', 'Contadores y asesoría contable en Kennedy, Bogotá y Soacha: declaración de renta, impuestos y contabilidad para tu negocio.', 23),
+('22222222-2222-4222-8222-222222222226', 'abogados', 'Abogados', 'Scale', 'Abogados y asesoría legal en Kennedy, Bogotá y Soacha: tutelas, contratos, derecho laboral y trámites jurídicos.', 86),
 ('22222222-2222-4222-8222-222222222224', 'licorerias', 'Licorerías', 'Wine', 'Licores nacionales e importados, cerveza fría y domicilios para la reunión.', 24),
 ('22222222-2222-4222-8222-222222222225', 'otros', 'Otros', 'Sparkles', 'Servicios y comercios que no entran en las demás categorías, igual de útiles.', 25)
 on conflict (id) do nothing;
