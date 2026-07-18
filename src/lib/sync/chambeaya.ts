@@ -63,8 +63,10 @@ export async function reenviarAChambeaya(datos: {
   if (!datos.telefono) return { ok: false, motivo: "sin telefono valido para Chambeaya" };
 
   try {
+    // Timeout de 3s: el reenvío no debe demorar el webhook del CRM (pg_net corta ~5s).
     const res = await fetch(url, {
       method: "POST",
+      signal: AbortSignal.timeout(3000),
       headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
       body: JSON.stringify({
         evento_id: datos.eventoId,
@@ -78,6 +80,10 @@ export async function reenviarAChambeaya(datos: {
     if (!res.ok) return { ok: false, motivo: `chambeaya respondió ${res.status}` };
     return { ok: true };
   } catch (e) {
+    // Mapea TimeoutError a motivo legible.
+    if (e instanceof Error && e.name === "TimeoutError") {
+      return { ok: false, motivo: "timeout hacia Chambeaya (3s)" };
+    }
     return { ok: false, motivo: e instanceof Error ? e.message : String(e) };
   }
 }

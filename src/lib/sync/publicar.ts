@@ -195,7 +195,7 @@ export async function publicarVenta(
 
   // Reenvío a Chambeaya (best-effort): si la categoría es elegible y hay
   // teléfono, registra el negocio como trabajador pendiente en Chambeaya.
-  const zonaChambeaya = zona.ciudad?.toLowerCase().includes("soacha")
+  const zonaChambeaya = zona.ciudad.toLowerCase().includes("soacha")
     ? "soacha"
     : "bogota";
   const telefonoChambeaya = normalizarTelefonoCo(registro.whatsapp, registro.telefono);
