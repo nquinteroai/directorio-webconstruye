@@ -135,6 +135,7 @@ export interface CombinacionZonaCategoria {
   zona: Pick<Zona, "slug" | "nombre">;
   categoria: Pick<Categoria, "slug" | "nombre" | "icono">;
   total: number;
+  orden: number;
 }
 
 /**
@@ -194,6 +195,7 @@ export const obtenerCombinacionesActivas = cache(
         zona: combo.zona,
         categoria: combo.categoria,
         total: combo.total,
+        orden: combo.orden,
       }));
   },
 );

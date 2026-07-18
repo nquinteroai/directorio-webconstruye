@@ -44,7 +44,7 @@ export default async function PaginaInicio() {
   // Para cada categoría con negocios, la zona donde más presencia tiene.
   const categoriasPopulares = new Map<
     string,
-    { nombre: string; icono: string | null; zonaSlug: string; total: number }
+    { nombre: string; icono: string | null; zonaSlug: string; total: number; orden: number }
   >();
   for (const combo of combinaciones) {
     const actual = categoriasPopulares.get(combo.categoria.slug);
@@ -54,9 +54,16 @@ export default async function PaginaInicio() {
         icono: combo.categoria.icono,
         zonaSlug: combo.zona.slug,
         total: (actual?.total ?? 0) + combo.total,
+        orden: combo.orden,
       });
     }
   }
+  // La home muestra solo las categorías principales (por orden); el listado
+  // completo vive en /categorias.
+  const CATEGORIAS_EN_HOME = 16;
+  const categoriasHome = [...categoriasPopulares.entries()]
+    .sort((a, b) => a[1].orden - b[1].orden)
+    .slice(0, CATEGORIAS_EN_HOME);
   const totalPorZona = new Map<string, number>();
   for (const combo of combinaciones) {
     totalPorZona.set(
@@ -127,7 +134,7 @@ export default async function PaginaInicio() {
             </Link>
           </div>
           <ul className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
-            {[...categoriasPopulares.entries()].map(([slug, cat]) => {
+            {categoriasHome.map(([slug, cat]) => {
               const Icono = iconoCategoria(cat.icono);
               return (
                 <li key={slug}>
