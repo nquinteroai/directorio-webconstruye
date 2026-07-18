@@ -41,6 +41,13 @@ const QUERY_POR_SLUG = {
   "asesorias-contables-jc": "office desk accounting",
   "licoreria-la-30": "wine liquor bottles store",
   "cerrajeria-24-horas": "keys locksmith lock",
+  "areperias-el-maiz": "corn cakes grilled food",
+  "agropecuaria-el-campo": "agriculture farm field",
+  "latoneria-y-pintura-el-retoque": "car garage workshop",
+  "punto-de-pago-el-vecino": "cash money counter shop",
+  "servicio-tecnico-electrohogar": "appliance repair tools",
+  "fumigaciones-el-escudo": "cleaning service worker",
+  "ortopedia-bienestar": "wheelchair",
 };
 
 const dormir = (ms) => new Promise((r) => setTimeout(r, ms));
