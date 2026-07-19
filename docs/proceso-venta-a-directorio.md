@@ -57,4 +57,23 @@ vende una página web. Probado de punta a punta el 2026-07-17.
 
 - Vista en `/admin` para revisar y publicar a mano las ventas `sin_match`
   (hoy se consultan por SQL).
-- Anclar servicios (plomero, electricista) a **Chambeaya** al vender.
+- ~~Anclar servicios a Chambeaya al vender~~ — HECHO el 18-jul (ver arriba).
+
+## Al entregar la web del cliente (paso obligatorio, 18-jul-2026)
+
+Cuando la web del cliente quede publicada:
+
+1. Entrar a `/admin`, abrir su negocio y llenar **"Sitio web (hecho por la
+   agencia)"** con la URL final. Con eso aparece el botón "Sitio web" en su
+   ficha (con tracking de clics) y queda el enlace ficha → web.
+2. Completar el **kit GBP del cliente** (`docs/kit-gbp-cliente.md`): su perfil
+   de Google enlaza la web nueva Y la ficha del directorio (web → ficha).
+   El circuito ficha ↔ web ↔ GBP es la señal local fuerte.
+
+Nota: el sync automático NO puede llenar `sitio_web` (la web se construye
+después de la venta); este paso es siempre manual.
+
+## Actualización (18-jul-2026)
+
+- La integración con **Chambeaya** ya está implementada y viva: ver
+  `docs/superpowers/specs/2026-07-18-sync-directorio-chambeaya-design.md`.

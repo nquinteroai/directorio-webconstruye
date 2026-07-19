@@ -241,7 +241,15 @@ export default async function PaginaNegocio({ params }: Props) {
                 Ficha de ejemplo.
               </span>{" "}
               Así se vería tu negocio en el directorio. Habla con{" "}
-              {siteConfig.agenciaNombre} para tener la tuya.
+              {siteConfig.agenciaNombre} para tener la tuya.{" "}
+              <a
+                href={siteConfig.agenciaDemosUrl}
+                target="_blank"
+                rel="noopener"
+                className="font-semibold text-primary underline underline-offset-4"
+              >
+                Vea cómo quedaría su página web →
+              </a>
             </p>
           ) : null}
           <section aria-labelledby="titulo-acerca">
@@ -399,7 +407,15 @@ export default async function PaginaNegocio({ params }: Props) {
                   Ficha de ejemplo.
                 </span>{" "}
                 Así se vería tu negocio en el directorio. Habla con{" "}
-                {siteConfig.agenciaNombre} para tener la tuya.
+                {siteConfig.agenciaNombre} para tener la tuya.{" "}
+                <a
+                  href={siteConfig.agenciaDemosUrl}
+                  target="_blank"
+                  rel="noopener"
+                  className="font-semibold text-primary underline underline-offset-4"
+                >
+                  Vea cómo quedaría su página web →
+                </a>
               </p>
             ) : null}
             <PanelContacto negocio={negocio} />

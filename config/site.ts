@@ -25,6 +25,8 @@ export const siteConfig = {
    * PLACEHOLDER: reemplazar por el número real antes de lanzar.
    */
   agenciaWhatsapp: "573181682069",
+  /** Galería de demos HD de la agencia (CTA en fichas de ejemplo). */
+  agenciaDemosUrl: "https://www.webconstruye.com/demos-hd",
   /** Mensaje precargado del CTA "¿Tienes un negocio? Aparece aquí". */
   mensajeCtaAgencia:
     "Hola, tengo un negocio y quiero aparecer en el Directorio Webconstruye.",
