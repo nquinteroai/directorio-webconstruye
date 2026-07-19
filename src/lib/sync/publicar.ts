@@ -86,7 +86,7 @@ export async function publicarVenta(
   const { data: demos, error: errDemos } = await supabase
     .from("demo_negocios")
     .select(
-      "id, slug, nombre, sector_id, telefono, whatsapp, direccion, ciudad, zona, latitud, longitud, foto_fachada_url, logo_url, estado",
+      "id, slug, nombre, sector_id, telefono, whatsapp, direccion, ciudad, zona, latitud, longitud, foto_fachada_url, logo_url, estado, adicionales_elegidos",
     );
   if (errDemos) {
     return { resultado: "error", detalle: { motivo: errDemos.message } };
@@ -157,6 +157,8 @@ export async function publicarVenta(
     ciudad: zona.ciudad,
     direccion: demo.direccion || payload.negocio.direccion || "",
     barrio: demo.zona,
+    servicios: demo.adicionales_elegidos ?? null,
+    semilla: demo.id,
   };
   const registro: NegocioInsert = {
     slug,

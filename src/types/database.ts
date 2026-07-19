@@ -400,6 +400,7 @@ export interface Database {
           longitud: number | null;
           foto_fachada_url: string | null;
           logo_url: string | null;
+          adicionales_elegidos: string[] | null;
           estado: string;
           created_at: string;
         };
