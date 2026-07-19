@@ -35,7 +35,9 @@ insert into public.zonas (id, slug, nombre, ciudad, departamento, descripcion_se
 on conflict (id) do nothing;
 
 -- ----------------------------------------------------------------------------
--- 2. CATEGORÍAS (25 típicas del comercio de barrio colombiano)
+-- 2. CATEGORÍAS (86, sincronizadas con la BD de producción el 18-jul-2026:
+--    25 originales + expansión de scripts/expandir-categorias.mjs + split
+--    contadores/abogados; los ids coinciden con los reales de la tabla)
 -- ----------------------------------------------------------------------------
 insert into public.categorias (id, slug, nombre, icono, descripcion_seo, orden) values
 ('22222222-2222-4222-8222-222222222201', 'restaurantes', 'Restaurantes', 'Utensils', 'Almuerzo casero, parrilla, comida típica y menú del día en restaurantes de barrio con sazón de verdad.', 1),
@@ -61,9 +63,69 @@ insert into public.categorias (id, slug, nombre, icono, descripcion_seo, orden) 
 ('22222222-2222-4222-8222-222222222221', 'floristerias', 'Floristerías', 'Flower2', 'Arreglos florales, ramos, condolencias y detalles para fechas especiales con domicilio.', 21),
 ('22222222-2222-4222-8222-222222222222', 'inmobiliarias', 'Inmobiliarias', 'Building2', 'Arriendo y venta de apartamentos, casas y locales con acompañamiento serio.', 22),
 ('22222222-2222-4222-8222-222222222223', 'contadores', 'Contadores', 'Calculator', 'Contadores y asesoría contable en Kennedy, Bogotá y Soacha: declaración de renta, impuestos y contabilidad para tu negocio.', 23),
-('22222222-2222-4222-8222-222222222226', 'abogados', 'Abogados', 'Scale', 'Abogados y asesoría legal en Kennedy, Bogotá y Soacha: tutelas, contratos, derecho laboral y trámites jurídicos.', 86),
 ('22222222-2222-4222-8222-222222222224', 'licorerias', 'Licorerías', 'Wine', 'Licores nacionales e importados, cerveza fría y domicilios para la reunión.', 24),
-('22222222-2222-4222-8222-222222222225', 'otros', 'Otros', 'Sparkles', 'Servicios y comercios que no entran en las demás categorías, igual de útiles.', 25)
+('22222222-2222-4222-8222-222222222225', 'otros', 'Otros', 'Sparkles', 'Servicios y comercios que no entran en las demás categorías, igual de útiles.', 25),
+('d2c0242d-af77-492a-8f0a-98a99f6090f2', 'asaderos', 'Asaderos', 'Drumstick', 'Encuentra asaderos en Kennedy (Bogotá) y Soacha: pollo asado, broaster, combos familiares y más, con WhatsApp, horarios y cómo llegar.', 26),
+('a0cf477c-50e6-4d25-b606-3cd419750de7', 'areperias', 'Areperías', 'CookingPot', 'Encuentra areperías en Kennedy (Bogotá) y Soacha: arepas rellenas, arepa de chócolo, desayunos y más, con WhatsApp, horarios y cómo llegar.', 27),
+('b05250a3-ce9a-4cc8-8099-4aa90e498402', 'pizzerias', 'Pizzerías', 'Pizza', 'Encuentra pizzerías en Kennedy (Bogotá) y Soacha: pizza familiar, por porciones, pasta y más, con WhatsApp, horarios y cómo llegar.', 28),
+('a37ae4c5-8833-418d-a31b-c92f6f14a425', 'heladerias', 'Heladerías', 'IceCreamCone', 'Encuentra heladerías en Kennedy (Bogotá) y Soacha: helados, malteadas, conos y más, con WhatsApp, horarios y cómo llegar.', 29),
+('a8fefe40-50a3-483f-8daf-c74ea25ad0c3', 'queserias', 'Queserías', 'Milk', 'Encuentra queserías en Kennedy (Bogotá) y Soacha: queso fresco, cuajada, kumis y más, con WhatsApp, horarios y cómo llegar.', 30),
+('c6aa41a3-4e61-4a2a-89c6-7f59697f4f86', 'materiales-construccion', 'Materiales de construcción', 'HardHat', 'Encuentra materiales de construcción en Kennedy (Bogotá) y Soacha: cemento, agregados, ladrillo y más, con WhatsApp, horarios y cómo llegar.', 31),
+('f0f3001a-73bf-443c-87ed-045d4592daa6', 'muebles', 'Muebles', 'Sofa', 'Encuentra muebles en Kennedy (Bogotá) y Soacha: salas, comedores, camas y más, con WhatsApp, horarios y cómo llegar.', 32),
+('8ec1004f-7852-4a82-8f0a-1fe3221a8816', 'colchones', 'Colchones', 'BedDouble', 'Encuentra colchones en Kennedy (Bogotá) y Soacha: colchones, bases, almohadas y más, con WhatsApp, horarios y cómo llegar.', 33),
+('221ca8fe-d1aa-47bb-8bba-2b3e982bd0d7', 'vidrieria', 'Vidriería y marquetería', 'Frame', 'Encuentra vidriería y marquetería en Kennedy (Bogotá) y Soacha: vidrios, espejos, marquetería y más, con WhatsApp, horarios y cómo llegar.', 34),
+('87fb1178-70c2-401e-9a0c-d8d3daae9c33', 'telas', 'Telas', 'Palette', 'Encuentra telas en Kennedy (Bogotá) y Soacha: telas por metro, insumos, botones y más, con WhatsApp, horarios y cómo llegar.', 35),
+('0bbe108a-1f83-410f-a749-0feec6ea4b48', 'cacharrerias', 'Cacharrerías', 'Package', 'Encuentra cacharrerías en Kennedy (Bogotá) y Soacha: hogar, aseo, cocina y más, con WhatsApp, horarios y cómo llegar.', 36),
+('66f8ea78-5366-4ac1-bfe9-7d1cd86f0f06', 'viveros', 'Viveros', 'Sprout', 'Encuentra viveros en Kennedy (Bogotá) y Soacha: plantas, materas, abonos y más, con WhatsApp, horarios y cómo llegar.', 37),
+('dc56b5b0-4280-4b61-bb4e-23a4bbacdb18', 'agropecuarios', 'Agropecuarios', 'Wheat', 'Encuentra agropecuarios en Kennedy (Bogotá) y Soacha: concentrados, alimento animal, insumos y más, con WhatsApp, horarios y cómo llegar.', 38),
+('687eeef9-6e37-44f3-85c6-d6a90b8ebce8', 'perfumerias', 'Perfumería y cosméticos', 'SprayCan', 'Encuentra perfumería y cosméticos en Kennedy (Bogotá) y Soacha: perfumes, maquillaje, cuidado facial y más, con WhatsApp, horarios y cómo llegar.', 39),
+('1a6cda57-2837-43f5-90b8-fbd645ad2b50', 'relojerias', 'Relojería', 'Watch', 'Encuentra relojería en Kennedy (Bogotá) y Soacha: relojes, reparación, cambio de pila y más, con WhatsApp, horarios y cómo llegar.', 40),
+('72f5b6b6-3205-47a1-8452-6b94e5619458', 'bisuterias', 'Bisutería', 'Gem', 'Encuentra bisutería en Kennedy (Bogotá) y Soacha: aretes, cadenas, pulseras y más, con WhatsApp, horarios y cómo llegar.', 41),
+('286a945a-68a4-4ba1-b129-8503d412086c', 'distribuidoras-belleza', 'Distribuidora de belleza', 'Sparkles', 'Encuentra distribuidora de belleza en Kennedy (Bogotá) y Soacha: tintes, herramientas, productos capilares y más, con WhatsApp, horarios y cómo llegar.', 42),
+('5676b646-6289-49e3-8bf5-98c613929512', 'sastrerias', 'Sastrería y arreglos', 'Ruler', 'Encuentra sastrería y arreglos en Kennedy (Bogotá) y Soacha: arreglos, a la medida, bastas y más, con WhatsApp, horarios y cómo llegar.', 43),
+('8df7cf50-f436-48ee-afc5-45a5df783edb', 'uniformes', 'Uniformes escolares', 'Shirt', 'Encuentra uniformes escolares en Kennedy (Bogotá) y Soacha: uniformes, sudaderas, bordados y más, con WhatsApp, horarios y cómo llegar.', 44),
+('306fc62e-cfb0-486b-89f0-4c020ea913ed', 'maletas', 'Maletas y marroquinería', 'Luggage', 'Encuentra maletas y marroquinería en Kennedy (Bogotá) y Soacha: maletas, morrales, bolsos y más, con WhatsApp, horarios y cómo llegar.', 45),
+('08d9c207-995e-4256-aaba-e70f4ae8f7ed', 'ropa-deportiva', 'Ropa deportiva', 'Dumbbell', 'Encuentra ropa deportiva en Kennedy (Bogotá) y Soacha: ropa deportiva, tenis, camisetas y más, con WhatsApp, horarios y cómo llegar.', 46),
+('13abdca6-e0a4-4880-905d-9181015ee0ff', 'ropa-infantil', 'Ropa infantil', 'Baby', 'Encuentra ropa infantil en Kennedy (Bogotá) y Soacha: ropa de bebé, ropa de niños, conjuntos y más, con WhatsApp, horarios y cómo llegar.', 47),
+('5a742cf6-d848-43a6-a1de-2c85dac6113c', 'ropa-segunda', 'Ropa de segunda', 'Shirt', 'Encuentra ropa de segunda en Kennedy (Bogotá) y Soacha: ropa americana, por prendas, por pacas y más, con WhatsApp, horarios y cómo llegar.', 48),
+('cc162db4-d6f6-4351-8920-eb9825af9f52', 'montallantas', 'Montallantas', 'Disc3', 'Encuentra montallantas en Kennedy (Bogotá) y Soacha: llantas, alineación, balanceo y más, con WhatsApp, horarios y cómo llegar.', 49),
+('839d5302-7f7c-4215-995e-0ceafacf78af', 'latonerias', 'Latonería y pintura', 'Car', 'Encuentra latonería y pintura en Kennedy (Bogotá) y Soacha: latonería, pintura, pulida y más, con WhatsApp, horarios y cómo llegar.', 50),
+('62b4d9b8-70b5-421b-9113-cb76e472b9a9', 'concesionarios', 'Concesionario de motos', 'Bike', 'Encuentra concesionario de motos en Kennedy (Bogotá) y Soacha: motos nuevas, usadas, financiación y más, con WhatsApp, horarios y cómo llegar.', 51),
+('0091bdee-8e3b-44cb-9edd-d163b5b5b736', 'repuestos', 'Repuestos de carro y moto', 'Cog', 'Encuentra repuestos de carro y moto en Kennedy (Bogotá) y Soacha: repuestos, lubricantes, accesorios y más, con WhatsApp, horarios y cómo llegar.', 52),
+('9e28466d-c23a-4348-ac66-d29ba358cb78', 'chatarrerias', 'Chatarrería y reciclaje', 'Recycle', 'Encuentra chatarrería y reciclaje en Kennedy (Bogotá) y Soacha: chatarra, metales, reciclaje y más, con WhatsApp, horarios y cómo llegar.', 53),
+('5783ff6e-15c1-4e60-83ab-cbaffc38b3a5', 'corresponsal-bancario', 'Corresponsal bancario y pagos', 'Banknote', 'Encuentra corresponsal bancario y pagos en Kennedy (Bogotá) y Soacha: pago de recibos, giros, recargas y más, con WhatsApp, horarios y cómo llegar.', 54),
+('01b5a830-2200-475f-a5d9-06779cd7e80f', 'compraventa', 'Compraventa y empeño', 'Coins', 'Encuentra compraventa y empeño en Kennedy (Bogotá) y Soacha: compra, venta, empeño y más, con WhatsApp, horarios y cómo llegar.', 55),
+('781755d7-ff6a-4507-9d9c-18c3e36a7d6a', 'cerrajerias', 'Cerrajería', 'Key', 'Encuentra cerrajería en Kennedy (Bogotá) y Soacha: apertura, copias, guardas y más, con WhatsApp, horarios y cómo llegar.', 56),
+('b32e38ab-6f8d-4f6c-9f35-9f664b181173', 'tramites-gestoria', 'Trámites y gestoría', 'FileText', 'Encuentra trámites y gestoría en Kennedy (Bogotá) y Soacha: tránsito, notariales, simit y más, con WhatsApp, horarios y cómo llegar.', 57),
+('480fe464-dc52-472f-85dc-4888266105ad', 'servicio-tecnico', 'Servicio técnico', 'Cpu', 'Encuentra servicio técnico en Kennedy (Bogotá) y Soacha: neveras, lavadoras, televisores y más, con WhatsApp, horarios y cómo llegar.', 58),
+('35531974-aff2-441e-bf20-c87119ef8ae0', 'fumigacion', 'Fumigación y control de plagas', 'Bug', 'Encuentra fumigación y control de plagas en Kennedy (Bogotá) y Soacha: fumigación, roedores, comején y más, con WhatsApp, horarios y cómo llegar.', 59),
+('d0945b03-8932-47a3-a13b-d323b6c015d8', 'alquiler-lavadoras', 'Alquiler de lavadoras', 'WashingMachine', 'Encuentra alquiler de lavadoras en Kennedy (Bogotá) y Soacha: alquiler por día, domicilio, entrega y más, con WhatsApp, horarios y cómo llegar.', 60),
+('05136ffd-323e-4680-b31f-7741da3e7759', 'alquiler-disfraces', 'Alquiler de disfraces', 'Drama', 'Encuentra alquiler de disfraces en Kennedy (Bogotá) y Soacha: alquiler, venta, niños y más, con WhatsApp, horarios y cómo llegar.', 61),
+('04a70eb3-a536-4035-9a7e-b7ed30960310', 'remontadoras', 'Remontadora de calzado', 'Footprints', 'Encuentra remontadora de calzado en Kennedy (Bogotá) y Soacha: medias suelas, tacones, reparación y más, con WhatsApp, horarios y cómo llegar.', 62),
+('b7c21c16-d89c-4b1b-bea4-9af9b7c6c585', 'publicidad', 'Publicidad y avisos', 'Megaphone', 'Encuentra publicidad y avisos en Kennedy (Bogotá) y Soacha: avisos, pendones, tarjetas y más, con WhatsApp, horarios y cómo llegar.', 63),
+('de8c8a0c-d925-4cf7-a639-0276a7d55e81', 'estudios-fotograficos', 'Estudio fotográfico', 'Camera', 'Encuentra estudio fotográfico en Kennedy (Bogotá) y Soacha: fotos de documento, retratos, eventos y más, con WhatsApp, horarios y cómo llegar.', 64),
+('9bac7a3e-e0d1-4e20-9b12-b390e5bb198c', 'mayoristas', 'Depósito mayorista', 'Warehouse', 'Encuentra depósito mayorista en Kennedy (Bogotá) y Soacha: al por mayor, víveres, aseo y más, con WhatsApp, horarios y cómo llegar.', 65),
+('6dd5d829-45b6-4038-801b-be286b1f44c2', 'laboratorios-clinicos', 'Laboratorio clínico', 'FlaskConical', 'Encuentra laboratorio clínico en Kennedy (Bogotá) y Soacha: exámenes de sangre, perfiles, domicilio y más, con WhatsApp, horarios y cómo llegar.', 66),
+('a7e393da-9fbc-4906-9ba9-18a371187731', 'fisioterapia', 'Fisioterapia', 'HeartPulse', 'Encuentra fisioterapia en Kennedy (Bogotá) y Soacha: rehabilitación, terapia de dolor, deportiva y más, con WhatsApp, horarios y cómo llegar.', 67),
+('2bee5b41-5d4e-456b-a672-afa6c50ed30c', 'ortopedia', 'Ortopedia', 'Bone', 'Encuentra ortopedia en Kennedy (Bogotá) y Soacha: sillas de ruedas, muletas, plantillas y más, con WhatsApp, horarios y cómo llegar.', 68),
+('fc5f6858-817b-4d83-9e8b-df6abf73f357', 'jardines-infantiles', 'Jardín infantil', 'Blocks', 'Encuentra jardín infantil en Kennedy (Bogotá) y Soacha: educación inicial, estimulación, refuerzo y más, con WhatsApp, horarios y cómo llegar.', 69),
+('6dfd030d-abc1-4c50-9843-7895bf26a886', 'colegios', 'Colegios', 'GraduationCap', 'Encuentra colegios en Kennedy (Bogotá) y Soacha: preescolar, primaria, bachillerato y más, con WhatsApp, horarios y cómo llegar.', 70),
+('ffe94536-235e-4844-b3d9-f183383d5f13', 'universidades', 'Universidades', 'School', 'Encuentra universidades en Kennedy (Bogotá) y Soacha: técnicos, tecnológicos, profesionales y más, con WhatsApp, horarios y cómo llegar.', 71),
+('dd8d5d98-243b-4ddd-8459-04c3b64ff049', 'academias-idiomas', 'Academia de idiomas', 'Languages', 'Encuentra academia de idiomas en Kennedy (Bogotá) y Soacha: inglés, todos los niveles, presencial y más, con WhatsApp, horarios y cómo llegar.', 72),
+('8c512d21-882e-4775-bddf-c6250bd926b5', 'institutos-tecnicos', 'Instituto técnico', 'BookOpen', 'Encuentra instituto técnico en Kennedy (Bogotá) y Soacha: cursos técnicos, sistemas, belleza y más, con WhatsApp, horarios y cómo llegar.', 73),
+('3199159c-e63e-46e5-9c54-30d6b216a5c7', 'escuelas-conduccion', 'Escuela de conducción', 'TrafficCone', 'Encuentra escuela de conducción en Kennedy (Bogotá) y Soacha: carro, moto, licencia y más, con WhatsApp, horarios y cómo llegar.', 74),
+('6ff94394-4409-4a88-8cd0-98eb522e3450', 'academias-baile', 'Academia de baile', 'Music', 'Encuentra academia de baile en Kennedy (Bogotá) y Soacha: salsa, bachata, urbano y más, con WhatsApp, horarios y cómo llegar.', 75),
+('16919ff0-ab51-489f-835b-8824509d4731', 'parqueaderos', 'Parqueaderos', 'SquareParking', 'Encuentra parqueaderos en Kennedy (Bogotá) y Soacha: por horas, mensualidad, moto y más, con WhatsApp, horarios y cómo llegar.', 76),
+('fd2999a5-1fc6-4167-9d23-a834f2c752c1', 'billares', 'Billares', 'Target', 'Encuentra billares en Kennedy (Bogotá) y Soacha: billar, pool, rana y más, con WhatsApp, horarios y cómo llegar.', 77),
+('c9a6d6da-13bc-4bab-8713-f2581e014333', 'canchas-sinteticas', 'Canchas sintéticas', 'Trophy', 'Encuentra canchas sintéticas en Kennedy (Bogotá) y Soacha: fútbol 5, fútbol 8, torneos y más, con WhatsApp, horarios y cómo llegar.', 78),
+('25db9dac-2f0c-4a12-add0-047dd4e5db95', 'salones-eventos', 'Salón de eventos', 'PartyPopper', 'Encuentra salón de eventos en Kennedy (Bogotá) y Soacha: salón, sonido, decoración y más, con WhatsApp, horarios y cómo llegar.', 79),
+('d7fad40f-ad80-40f6-b270-7e0bbc53bc03', 'agencias-viajes', 'Agencia de viajes', 'Plane', 'Encuentra agencia de viajes en Kennedy (Bogotá) y Soacha: tiquetes, planes, hoteles y más, con WhatsApp, horarios y cómo llegar.', 80),
+('e36dcfd5-aef1-491b-a3c4-b795e6d7a23e', 'tatuajes', 'Estudio de tatuajes', 'Feather', 'Encuentra estudio de tatuajes en Kennedy (Bogotá) y Soacha: tatuajes, piercings, retoques y más, con WhatsApp, horarios y cómo llegar.', 81),
+('28483c75-b1b8-46a0-9dc6-e7031eb9b08d', 'funerarias', 'Funerarias', 'Cross', 'Encuentra funerarias en Kennedy (Bogotá) y Soacha: exequias, salas de velación, cofres y más, con WhatsApp, horarios y cómo llegar.', 82),
+('bb004a84-396c-4973-8f06-f55fcea7cc23', 'iglesias', 'Iglesias', 'Church', 'Encuentra iglesias en Kennedy (Bogotá) y Soacha: servicios, grupos, oración y más, con WhatsApp, horarios y cómo llegar.', 83),
+('81df0292-16e4-48cd-956a-6aa4721eb0fe', 'constructoras', 'Constructoras', 'Building2', 'Encuentra constructoras en Kennedy (Bogotá) y Soacha: construcción, remodelación, acabados y más, con WhatsApp, horarios y cómo llegar.', 84),
+('37c15406-d98e-44b4-838b-a26c33cec532', 'sex-shop', 'Sex-shop', 'Heart', 'Encuentra sex-shop en Kennedy (Bogotá) y Soacha: adultos, lencería, juguetería y más, con WhatsApp, horarios y cómo llegar.', 85),
+('930aa466-effd-45f7-a1c6-d863e00fedf8', 'abogados', 'Abogados', 'Scale', 'Abogados y asesoría legal en Kennedy, Bogotá y Soacha: tutelas, contratos, derecho laboral y trámites jurídicos.', 86)
 on conflict (id) do nothing;
 
 -- ----------------------------------------------------------------------------
