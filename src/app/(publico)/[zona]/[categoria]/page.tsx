@@ -18,7 +18,8 @@ import {
   obtenerPorZonaYCategoria,
 } from "@/lib/queries/negocios";
 import { obtenerZonaPorSlug } from "@/lib/queries/zonas";
-import { datosBreadcrumb, datosItemList, JsonLd } from "@/lib/seo/jsonld";
+import { obtenerContenidoZonal } from "@/lib/queries/contenido-zonal";
+import { datosBreadcrumb, datosFaqPage, datosItemList, JsonLd } from "@/lib/seo/jsonld";
 
 export const revalidate = 3600;
 export const dynamicParams = true;
@@ -64,9 +65,10 @@ export default async function PaginaZonaCategoria({ params }: Props) {
   ]);
   if (!zona || !categoria) notFound();
 
-  const [negocios, combinaciones] = await Promise.all([
+  const [negocios, combinaciones, contenido] = await Promise.all([
     obtenerPorZonaYCategoria(zona.id, categoria.id),
     obtenerCombinacionesActivas(),
+    obtenerContenidoZonal(categoria.id, zona.id),
   ]);
 
   // Regla anti "thin content": solo existen landings con al menos 1 negocio.
@@ -111,6 +113,9 @@ export default async function PaginaZonaCategoria({ params }: Props) {
             `${categoria.nombre} en ${zona.nombre}`,
             negocios,
           ),
+          ...(contenido && contenido.faqs.length > 0
+            ? [datosFaqPage(contenido.faqs)]
+            : []),
         ]}
       />
       <Breadcrumb>
@@ -172,6 +177,14 @@ export default async function PaginaZonaCategoria({ params }: Props) {
         </div>
       </section>
 
+      {contenido ? (
+        <section
+          aria-label={`Sobre ${nombreCategoriaLower} en ${zona.nombre}`}
+          className="mt-10 max-w-3xl space-y-4 text-[15px] leading-7 text-muted-foreground [&_h2]:font-heading [&_h2]:text-foreground"
+          dangerouslySetInnerHTML={{ __html: contenido.intro_html }}
+        />
+      ) : null}
+
       {mismaCategoriaOtraZona.length > 0 ? (
         <aside className="mt-10 rounded-xl border bg-secondary/40 p-5">
           <p className="text-sm text-muted-foreground">
@@ -227,6 +240,29 @@ export default async function PaginaZonaCategoria({ params }: Props) {
             </li>
           </ul>
         </nav>
+      ) : null}
+
+      {contenido && contenido.faqs.length > 0 ? (
+        <section aria-label="Preguntas frecuentes" className="mt-10 max-w-3xl">
+          <h2 className="font-heading text-lg font-semibold">
+            Preguntas frecuentes sobre {nombreCategoriaLower} en {zona.nombre}
+          </h2>
+          <div className="mt-3 space-y-2">
+            {contenido.faqs.map((faq) => (
+              <details
+                key={faq.pregunta}
+                className="group rounded-xl border bg-card px-4 py-3"
+              >
+                <summary className="cursor-pointer text-sm font-semibold marker:content-none">
+                  {faq.pregunta}
+                </summary>
+                <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                  {faq.respuesta}
+                </p>
+              </details>
+            ))}
+          </div>
+        </section>
       ) : null}
     </main>
   );
