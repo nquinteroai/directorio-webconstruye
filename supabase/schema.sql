@@ -475,6 +475,24 @@ create index idx_sync_eventos_pendientes
   on public.sync_eventos (created_at desc)
   where resultado in ('sin_match', 'error');
 
+-- Contenido editorial por categoría×zona (SEO, jul-2026)
+create table public.contenido_zonal (
+  id uuid primary key default gen_random_uuid(),
+  categoria_id uuid not null references public.categorias(id) on delete cascade,
+  zona_id uuid not null references public.zonas(id) on delete cascade,
+  intro_html text not null,
+  faqs jsonb not null default '[]'::jsonb,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  unique (categoria_id, zona_id)
+);
+
+alter table public.contenido_zonal enable row level security;
+
+create policy "contenido_zonal_lectura_publica"
+  on public.contenido_zonal for select using (true);
+-- Sin políticas de escritura anon: solo service role / admin (patrón del repo).
+
 -- ============================================================================
 -- FIN DEL ESQUEMA — ahora ejecuta seed.sql y sigue supabase/README.md
 -- ============================================================================

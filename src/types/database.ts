@@ -40,6 +40,12 @@ export type ResultadoSync =
   | "duplicado"
   | "error";
 
+/** Pregunta frecuente de una página editorial categoría×zona. */
+export interface FaqZonal {
+  pregunta: string;
+  respuesta: string;
+}
+
 /** Franja de atención de un día. `null` = cerrado ese día. */
 export interface FranjaHoraria {
   /** Hora de apertura en formato HH:mm (24h). */
@@ -409,6 +415,51 @@ export interface Database {
         Insert: never;
         Update: never;
         Relationships: [];
+      };
+      contenido_zonal: {
+        Row: {
+          id: string;
+          categoria_id: string;
+          zona_id: string;
+          intro_html: string;
+          faqs: Json;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          categoria_id: string;
+          zona_id: string;
+          intro_html: string;
+          faqs?: Json;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          categoria_id?: string;
+          zona_id?: string;
+          intro_html?: string;
+          faqs?: Json;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "contenido_zonal_categoria_id_fkey";
+            columns: ["categoria_id"];
+            isOneToOne: false;
+            referencedRelation: "categorias";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "contenido_zonal_zona_id_fkey";
+            columns: ["zona_id"];
+            isOneToOne: false;
+            referencedRelation: "zonas";
+            referencedColumns: ["id"];
+          },
+        ];
       };
     };
     Views: Record<string, never>;
