@@ -5,6 +5,7 @@ import {
 } from "@/lib/utils/horarios";
 import type {
   DiaSemana,
+  FaqZonal,
   NegocioConRelaciones,
 } from "@/types/database";
 import type { ResumenResenas } from "@/lib/queries/resenas";
@@ -171,6 +172,18 @@ export function datosItemList(
       position: indice + 1,
       name: negocio.nombre,
       url: `${siteConfig.url}/negocio/${negocio.slug}`,
+    })),
+  };
+}
+
+/** FAQPage para el bloque de preguntas frecuentes de categoría×zona. */
+export function datosFaqPage(faqs: FaqZonal[]): ObjetoJsonLd {
+  return {
+    "@type": "FAQPage",
+    mainEntity: faqs.map((f) => ({
+      "@type": "Question",
+      name: f.pregunta,
+      acceptedAnswer: { "@type": "Answer", text: f.respuesta },
     })),
   };
 }
