@@ -157,7 +157,8 @@ export async function publicarVenta(
     ciudad: zona.ciudad,
     direccion: demo.direccion || payload.negocio.direccion || "",
     barrio: demo.zona,
-    servicios: demo.adicionales_elegidos ?? null,
+    // demo_negocios no tiene servicios del negocio (adicionales_elegidos son add-ons del paquete web); sin servicios hasta tener columna real.
+    servicios: null,
     semilla: demo.id,
   };
   const registro: NegocioInsert = {

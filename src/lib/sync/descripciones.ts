@@ -13,7 +13,6 @@ interface DatosDescripcion {
   direccion: string;
   barrio?: string | null;
   servicios?: string[] | null;
-  horarios?: unknown;
   semilla?: string;
 }
 
