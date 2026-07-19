@@ -181,6 +181,9 @@ export default async function PaginaZonaCategoria({ params }: Props) {
         <section
           aria-label={`Sobre ${nombreCategoriaLower} en ${zona.nombre}`}
           className="mt-10 max-w-3xl space-y-4 text-[15px] leading-7 text-muted-foreground [&_h2]:font-heading [&_h2]:text-foreground"
+          // intro_html solo se escribe con service role (RLS sin escritura
+          // anon): nunca contiene HTML de usuarios. No copiar este patrón
+          // para campos que sí reciban input público.
           dangerouslySetInnerHTML={{ __html: contenido.intro_html }}
         />
       ) : null}
